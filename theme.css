@@ -1,0 +1,2173 @@
+/*
+  Opendian Theme for Obsidian
+  Inspired by the OpenCode visual language (https://opencode.ai).
+
+  Design philosophy:
+  "Monospace documentation, minimal chrome, precise color."
+
+  Tokens are derived from the OpenCode website + Starlight docs site:
+  - Light:  bg #FFFFFF, surface #F5F5F7, border #D2D2D7, text #1D1D1F
+  - Dark:   bg #0C0C0E, surface #161618, border #38383A, text #FFFFFF
+  - Accent: #007AFF (OpenCode blue)
+  - Fonts:  IBM Plex Mono / Berkeley Mono stack
+*/
+
+/* ============================================================
+   OPENCODE DESIGN TOKENS
+   ============================================================ */
+
+.theme-dark {
+  /* OpenCode palette */
+  --oc-bg: #0c0c0e;
+  --oc-surface: #161618;
+  --oc-surface-elevated: #1c1c1f;
+  --oc-border: #38383a;
+  --oc-border-muted: #2c2c2e;
+  --oc-text: #ffffff;
+  --oc-text-secondary: #c7c7cc;
+  --oc-text-muted: #a1a1a6;
+  --oc-text-disabled: #68686f;
+  --oc-accent: #007aff;
+  --oc-accent-hover: #0056b3;
+  --oc-success: #30d158;
+  --oc-warning: #ff9f0a;
+  --oc-danger: #ff453a;
+
+  /* Semantic aliases (used by Obsidian internals) */
+  --background-primary: var(--oc-bg);
+  --background-primary-alt: var(--oc-surface);
+  --background-secondary: var(--oc-surface);
+  --background-secondary-alt: var(--oc-surface-elevated);
+  --background-tertiary: var(--oc-surface-elevated);
+  --background-modifier-form-field: var(--oc-surface);
+  --background-modifier-form-field-highlighted: var(--oc-surface-elevated);
+  --background-modifier-border: var(--oc-border);
+  --background-modifier-border-hover: var(--oc-border-muted);
+  --background-modifier-border-focus: var(--oc-accent);
+  --background-modifier-error: rgba(255, 69, 58, 0.12);
+  --background-modifier-error-hover: rgba(255, 69, 58, 0.18);
+  --background-modifier-success: rgba(48, 209, 88, 0.12);
+  --background-modifier-message: var(--oc-surface-elevated);
+
+  --text-normal: var(--oc-text);
+  --text-muted: var(--oc-text-muted);
+  --text-faint: var(--oc-text-disabled);
+  --text-accent: var(--oc-accent);
+  --text-accent-hover: var(--oc-accent-hover);
+  --text-error: var(--oc-danger);
+  --text-success: var(--oc-success);
+  --text-selection: rgba(0, 122, 255, 0.25);
+
+  --interactive-normal: var(--oc-surface);
+  --interactive-hover: var(--oc-surface-elevated);
+  --interactive-accent: var(--oc-accent);
+  --interactive-accent-hover: var(--oc-accent-hover);
+
+  /* Custom short tokens (legacy-compatible) */
+  --bg-color: var(--oc-bg);
+  --bg-secondary: var(--oc-surface);
+  --bg-tertiary: var(--oc-surface-elevated);
+  --bg-surface: var(--oc-surface-elevated);
+  --border-color: var(--oc-border);
+  --border-hover: var(--oc-border-muted);
+  --border-hairline: rgba(255, 255, 255, 0.06);
+  --bg-active: rgba(255, 255, 255, 0.09);
+  --bg-hover: rgba(255, 255, 255, 0.04);
+  /* Active tab needs a noticeably darker fill than a hover/selected icon
+     so the open file reads at a glance, without jumping to a flat white. */
+  --bg-tab-active: rgba(255, 255, 255, 0.14);
+
+  /* Callouts (Starlight aside mapping) */
+  --callout-info-bg: rgba(0, 122, 255, 0.10);
+  --callout-info-text: #4aa2ff;
+  --callout-success-bg: rgba(48, 209, 88, 0.10);
+  --callout-success-text: #4cd964;
+  --callout-warning-bg: rgba(255, 159, 10, 0.10);
+  --callout-warning-text: #ffb340;
+  --callout-error-bg: rgba(255, 69, 58, 0.10);
+  --callout-error-text: #ff6961;
+
+  /* UI chrome */
+  --sidebar-pill-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-pill-border: rgba(255, 255, 255, 0.12);
+  --code-dot-color: var(--oc-text-disabled);
+  /* Checkbox: monochrome fill (black in light / white in dark, via
+     --text-normal), small radius, tick uses --background-primary for
+     contrast. --checklist-done-decoration:none drops the strikethrough on
+     done tasks (Folio-style: just fade via --checklist-done-color). */
+  --checkbox-radius: 3px;
+  --checkbox-color: var(--text-normal);
+  --checkbox-color-hover: var(--text-muted);
+  --checkbox-marker-color: var(--background-primary);
+  --checklist-done-decoration: none;
+  /* Blockquote: a single neutral bar. Obsidian's default points this at
+     --interactive-accent (the stray blue line) and drives both reading
+     and editor; neutralize it and the theme's extra .cm-quote border. */
+  --blockquote-border-color: var(--oc-border);
+  --blockquote-border-thickness: 2px;
+  /* Radius scale — one consistent system across the whole theme:
+       content surfaces (code / tables / callouts) = 0px  (sharp doc style)
+       small chips (tags, inline)                   = --oc-radius        4px
+       controls (buttons / inputs / icons / tabs)   = --oc-radius-control 6px
+       floating popovers (menus / palette / tooltip)= --oc-radius-panel   8px
+       modals / settings window                     = --oc-radius-modal  12px */
+  --oc-radius-control: 6px;
+  --oc-radius-panel: 8px;
+  --oc-radius-modal: 12px;
+  /* Unify the top window chrome: titlebar, tab bar and the sidebar-toggle
+     all share ONE surface. Obsidian's default focused variant is white
+     (--background-secondary-alt), which made the collapse-sidebar icon read
+     whiter than its neighbours and broke the immersive titlebar. */
+  --titlebar-background: var(--oc-surface);
+  --titlebar-background-focused: var(--oc-surface);
+  --tab-container-background: var(--oc-surface);
+  /* Borderless dropdown chevron — light stroke for dark bg */
+  --oc-dropdown-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a1a1a6' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+
+  /* Toggle switches — refined rounded-RECTANGLE, OpenCode client style.
+     Not a pill: small corner radius on both track and knob. Geometry is
+     variable-driven (height = thumb + 2*border, knob inset = border), so
+     the knob is centered by construction on every platform — we never
+     touch ::after geometry directly.
+     Dark mode colors: OFF track is a mid gray (knob reads against it),
+     ON track flips to white (--text-normal) with a near-black knob. */
+  --oc-toggle-off: #636366;
+  --oc-toggle-on: var(--text-normal);
+  --toggle-radius: 5px;
+  --toggle-thumb-radius: 3px;
+  --toggle-thumb-color: #0c0c0e;
+  --toggle-s-border-width: 3px;
+  --toggle-s-width: 36px;
+  --toggle-s-thumb-width: 14px;
+  --toggle-s-thumb-height: 14px;
+  --toggle-border-width: 3px;
+  --toggle-width: 36px;
+  --toggle-thumb-width: 14px;
+  --toggle-thumb-height: 14px;
+
+  /* Logo split: number of leading characters shown muted.
+     Uses ch units so it tracks monospace char width precisely.
+     Override per-vault if your name is longer/shorter or CJK
+     (CJK glyphs are ~2ch wide, so halve this for full-width text). */
+  --oc-logo-split: 4ch;
+
+  /* Radius strategy: small, consistent corners */
+  --oc-radius: 4px;
+  --radius-s: 0px;
+  --radius-m: var(--oc-radius);
+  --radius-l: var(--oc-radius);
+  --radius-xl: var(--oc-radius);
+  --control-radius: var(--oc-radius);
+  --control-radius-sm: var(--oc-radius);
+
+  /* Typography: OpenCode uses a mono-forward stack */
+  --font-default: 'IBM Plex Mono', 'Berkeley Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace, 'Source Han Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-monospace: var(--font-default);
+  --font-heading: var(--font-default);
+}
+
+.theme-light {
+  /* OpenCode palette */
+  --oc-bg: #ffffff;
+  --oc-surface: #f5f5f7;
+  --oc-surface-elevated: #ffffff;
+  --oc-border: #d2d2d7;
+  --oc-border-muted: #e5e5ea;
+  --oc-text: #1d1d1f;
+  --oc-text-secondary: #424245;
+  --oc-text-muted: #6e6e73;
+  --oc-text-disabled: #86868b;
+  --oc-accent: #007aff;
+  --oc-accent-hover: #0056b3;
+  --oc-success: #30d158;
+  --oc-warning: #ff9f0a;
+  --oc-danger: #ff3b30;
+
+  /* Semantic aliases */
+  --background-primary: var(--oc-bg);
+  --background-primary-alt: var(--oc-surface);
+  --background-secondary: var(--oc-surface);
+  --background-secondary-alt: var(--oc-surface-elevated);
+  --background-tertiary: var(--oc-surface-elevated);
+  --background-modifier-form-field: var(--oc-bg);
+  --background-modifier-form-field-highlighted: var(--oc-surface);
+  --background-modifier-border: var(--oc-border);
+  --background-modifier-border-hover: var(--oc-border-muted);
+  --background-modifier-border-focus: var(--oc-accent);
+  --background-modifier-error: rgba(255, 59, 48, 0.10);
+  --background-modifier-error-hover: rgba(255, 59, 48, 0.16);
+  --background-modifier-success: rgba(48, 209, 88, 0.10);
+  --background-modifier-message: var(--oc-surface-elevated);
+
+  --text-normal: var(--oc-text);
+  --text-muted: var(--oc-text-muted);
+  --text-faint: var(--oc-text-disabled);
+  --text-accent: var(--oc-accent);
+  --text-accent-hover: var(--oc-accent-hover);
+  --text-error: var(--oc-danger);
+  --text-success: var(--oc-success);
+  --text-selection: rgba(0, 122, 255, 0.20);
+
+  --interactive-normal: var(--oc-surface);
+  --interactive-hover: var(--oc-surface-elevated);
+  --interactive-accent: var(--oc-accent);
+  --interactive-accent-hover: var(--oc-accent-hover);
+
+  /* Custom short tokens */
+  --bg-color: var(--oc-bg);
+  --bg-secondary: var(--oc-surface);
+  --bg-tertiary: var(--oc-surface-elevated);
+  --bg-surface: var(--oc-surface-elevated);
+  --border-color: var(--oc-border);
+  --border-hover: var(--oc-border-muted);
+  --border-hairline: rgba(0, 0, 0, 0.06);
+  --bg-active: rgba(0, 0, 0, 0.07);
+  --bg-hover: rgba(0, 0, 0, 0.03);
+  --bg-tab-active: rgba(0, 0, 0, 0.12);
+
+  /* Callouts */
+  --callout-info-bg: rgba(0, 122, 255, 0.08);
+  --callout-info-text: #0066d4;
+  --callout-success-bg: rgba(48, 209, 88, 0.08);
+  --callout-success-text: #248a3d;
+  --callout-warning-bg: rgba(255, 159, 10, 0.08);
+  --callout-warning-text: #c77f00;
+  --callout-error-bg: rgba(255, 59, 48, 0.08);
+  --callout-error-text: #d70015;
+
+  /* UI chrome */
+  --sidebar-pill-bg: #ffffff;
+  --sidebar-pill-border: var(--oc-border);
+  --code-dot-color: var(--oc-text-disabled);
+  /* Checkbox: monochrome fill (black in light / white in dark, via
+     --text-normal), small radius, tick uses --background-primary for
+     contrast. --checklist-done-decoration:none drops the strikethrough on
+     done tasks (Folio-style: just fade via --checklist-done-color). */
+  --checkbox-radius: 3px;
+  --checkbox-color: var(--text-normal);
+  --checkbox-color-hover: var(--text-muted);
+  --checkbox-marker-color: var(--background-primary);
+  --checklist-done-decoration: none;
+  /* Blockquote: a single neutral bar. Obsidian's default points this at
+     --interactive-accent (the stray blue line) and drives both reading
+     and editor; neutralize it and the theme's extra .cm-quote border. */
+  --blockquote-border-color: var(--oc-border);
+  --blockquote-border-thickness: 2px;
+  /* Radius scale — one consistent system across the whole theme:
+       content surfaces (code / tables / callouts) = 0px  (sharp doc style)
+       small chips (tags, inline)                   = --oc-radius        4px
+       controls (buttons / inputs / icons / tabs)   = --oc-radius-control 6px
+       floating popovers (menus / palette / tooltip)= --oc-radius-panel   8px
+       modals / settings window                     = --oc-radius-modal  12px */
+  --oc-radius-control: 6px;
+  --oc-radius-panel: 8px;
+  --oc-radius-modal: 12px;
+  /* Unify the top window chrome: titlebar, tab bar and the sidebar-toggle
+     all share ONE surface. Obsidian's default focused variant is white
+     (--background-secondary-alt), which made the collapse-sidebar icon read
+     whiter than its neighbours and broke the immersive titlebar. */
+  --titlebar-background: var(--oc-surface);
+  --titlebar-background-focused: var(--oc-surface);
+  --tab-container-background: var(--oc-surface);
+  /* Borderless dropdown chevron — dark stroke for light bg */
+  --oc-dropdown-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236e6e73' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+
+  /* Toggle switches — refined rounded-RECTANGLE, OpenCode client style.
+     Not a pill: small corner radius on both track and knob. Light mode:
+     OFF track is a light gray, ON track flips to near-black
+     (--text-normal) with a white knob — matches the OpenCode desktop
+     switch (black fill + white knob). */
+  --oc-toggle-off: #c7c7cc;
+  --oc-toggle-on: var(--text-normal);
+  --toggle-radius: 5px;
+  --toggle-thumb-radius: 3px;
+  --toggle-thumb-color: #ffffff;
+  --toggle-s-border-width: 3px;
+  --toggle-s-width: 36px;
+  --toggle-s-thumb-width: 14px;
+  --toggle-s-thumb-height: 14px;
+  --toggle-border-width: 3px;
+  --toggle-width: 36px;
+  --toggle-thumb-width: 14px;
+  --toggle-thumb-height: 14px;
+
+  /* Logo split: number of leading characters shown muted.
+     Matches OpenCode "open|code" — first 4 chars muted, rest bold.
+     CJK names use ~2ch/glyph, so set ~2ch per CJK character. */
+  --oc-logo-split: 4ch;
+
+  /* Radius */
+  --oc-radius: 4px;
+  --radius-s: 0px;
+  --radius-m: var(--oc-radius);
+  --radius-l: var(--oc-radius);
+  --radius-xl: var(--oc-radius);
+  --control-radius: var(--oc-radius);
+  --control-radius-sm: var(--oc-radius);
+
+  /* Typography */
+  --font-default: 'IBM Plex Mono', 'Berkeley Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace, 'Source Han Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-monospace: var(--font-default);
+  --font-heading: var(--font-default);
+}
+
+/* ============================================================
+   1. BASE
+   ============================================================ */
+body {
+  background-color: var(--background-primary);
+  color: var(--text-normal);
+  font-family: var(--font-default);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 15px;
+  line-height: 1.7;
+  font-variant-ligatures: none;
+}
+
+/* Comfortable prose rhythm — more air between blocks reads more modern than
+   the previous dense 1.6 / tight margins. */
+.markdown-rendered p {
+  margin-block: 0 0.9em;
+}
+.markdown-rendered li {
+  line-height: 1.7;
+}
+
+.workspace {
+  background-color: var(--background-primary);
+}
+
+.workspace-split.mod-root .view-content {
+  background-color: var(--background-primary);
+}
+
+.view-header {
+  background-color: transparent;
+  border-bottom: none;
+}
+
+.view-header-title {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ============================================================
+   2. SIDEBAR & LOGO
+   ============================================================ */
+.workspace-split.mod-left-split,
+.workspace-split.mod-right-split {
+  background-color: var(--background-secondary);
+}
+
+.workspace-split.mod-left-split {
+  border-right: 1px solid var(--border-hairline);
+}
+.workspace-split.mod-right-split {
+  border-left: 1px solid var(--border-hairline);
+  border-right: none;
+}
+
+/* Vault name / logo area — OpenCode dual-tone effect.
+   The split point is driven by --oc-logo-split (ch units), so it
+   stays accurate across vault names of different lengths in a
+   monospace stack. Override --oc-logo-split per-vault as needed. */
+.nav-folder.mod-root > .nav-folder-title {
+  margin: 12px 12px 20px 12px;
+  padding: 8px 12px;
+  background-color: transparent;
+  border: none;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  font-size: 1.25em;
+  color: var(--text-normal);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Dual-tone wordmark: first --oc-logo-split chars muted, rest full-bold.
+   Covers the file-tree root title (left rail) and the vault profile
+   shown in the settings sidebar + left-bottom switcher. */
+.nav-folder.mod-root > .nav-folder-title .nav-folder-title-content,
+.workspace-sidedock-vault-profile .workspace-sidedock-vault-profile-name,
+.workspace-sidedock-vault-profile .workspace-sidedock-vault-profile-text {
+  background: linear-gradient(
+    90deg,
+    var(--oc-text-muted) 0,
+    var(--oc-text-muted) var(--oc-logo-split),
+    var(--text-normal) var(--oc-logo-split),
+    var(--text-normal) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  text-transform: none;
+  /* Expose the split in DevTools; harmless in production */
+  background-size: 100% 100%;
+}
+
+/* Bottom-left vault switcher — clean, no avatar box. */
+/* Drop the divider line above the vault switcher (cleaner footer). */
+body:not(.is-mobile) .workspace-split.mod-left-split
+  .workspace-sidedock-vault-profile {
+  border-top: none !important;
+}
+
+/* Rounded hover panel on the switcher (was square-cornered). */
+body:not(.is-mobile) .workspace-split.mod-left-split
+  .workspace-sidedock-vault-profile .workspace-drawer-vault-switcher {
+  border-radius: var(--oc-radius-control);
+}
+
+body:not(.is-mobile) .workspace-split.mod-left-split
+  .workspace-sidedock-vault-profile .workspace-drawer-vault-switcher-icon {
+  display: none !important;
+}
+
+body:not(.is-mobile) .workspace-split.mod-left-split
+  .workspace-sidedock-vault-profile .workspace-drawer-vault-name {
+  font-weight: 600;
+  color: var(--text-normal);
+}
+
+/* File explorer nav items */
+/* Nav items (files & folders) are .tree-item-self under the hood. Obsidian
+   paints their hover/active background ON .tree-item-self (app.css:9507-9517)
+   using --nav-item-background-hover/active, with a rounded --nav-item-radius.
+   Opendian ALSO paints a background on .nav-file-title.is-active for the
+   left-accent-rail style → two stacked backgrounds = the "double layer"
+   (rounded native fill behind our fill). Fix: neutralize the native fill so
+   only our single layer shows; the radius token stays so shapes match. */
+.nav-file-title,
+.nav-folder-title {
+  --nav-item-radius: var(--oc-radius-control);
+  --nav-item-background-hover: transparent;
+  --nav-item-background-active: transparent;
+  --nav-item-background-selected: transparent;
+  padding: 5px 10px 5px 14px;
+  margin: 1px 0;
+  color: var(--text-normal);
+  transition: background-color 0.12s ease, color 0.12s ease;
+  border-left: 2px solid transparent;
+}
+
+.nav-file-title.is-active {
+  background-color: var(--bg-active);
+  border: none;
+  border-left: 2px solid var(--text-normal);
+  font-weight: 600;
+  color: var(--text-normal);
+}
+
+.nav-file-title:hover:not(.is-active),
+.nav-folder-title:hover {
+  background-color: var(--bg-hover);
+}
+
+.nav-folder-title {
+  font-size: 0.95em;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.nav-folder-collapse-indicator {
+  opacity: 0.4;
+  transition: opacity 0.12s ease;
+}
+.nav-folder-title:hover .nav-folder-collapse-indicator {
+  opacity: 0.8;
+}
+
+/* Right sidebar (outline/backlinks) */
+.workspace-split.mod-right-split .nav-file-title.is-active,
+.workspace-split.mod-right-split .tree-item-self.is-active,
+.workspace-split.mod-right-split .nav-file-title:hover,
+.workspace-split.mod-right-split .tree-item-self:hover {
+  background-color: var(--bg-hover);
+}
+
+.workspace-split.mod-right-split .nav-file-title.is-active,
+.workspace-split.mod-right-split .tree-item-self.is-active {
+  border-left: 2px solid var(--text-normal);
+  color: var(--text-normal);
+}
+
+/* Ribbon — do NOT override --ribbon-padding. Obsidian's native
+   8px/4px/12px (top/sides/bottom) is intentional: the sidebar-toggle
+   arrow is position:absolute pinned to top:0 and ignores this padding,
+   while the functional icon column (search/graph/etc) flows in the
+   padded area. A previous attempt to "symmetrize" top/bottom pushed
+   the icon column down 4px but left the toggle pinned, breaking the
+   alignment between the toggle and the icons below it. Leaving the
+   native padding restores their default relationship. */
+.workspace-ribbon {
+  background-color: var(--background-secondary);
+  border-right: 1px solid var(--border-hairline);
+}
+/* NOTE on sidebar icon alignment (v1.10.9 root-cause fix):
+   The 📁/🔍/🔖 icons in the left sidebar are NOT ribbon actions
+   (.side-dock-actions) — they are sidebar TAB HEADERS living in
+   .workspace-tab-header-container. Obsidian gives their inner wrapper a
+   native `margin: 6px 0 0 0` that drops the icon row down to align with
+   the collapse toggle (which is position:absolute, immune to margin).
+   A prior §3 redesign added an UNSCOPED
+   `.workspace-tab-header-container .workspace-tab-header-container-inner
+   { margin: 0 !important }` meant only for the main editor tab bar; it
+   leaked onto the sidebar and wiped that 6px → icons floated ~2px high.
+   All §3 geometry rules are now scoped to .mod-root so the sidebar tab
+   headers keep their native geometry. We add nothing to the ribbon. */
+.workspace-ribbon .clickable-icon {
+  opacity: 0.45;
+  border-radius: var(--oc-radius-control);
+  transition: opacity 0.12s ease, background-color 0.12s ease;
+}
+.workspace-ribbon .clickable-icon:hover {
+  opacity: 0.9;
+  background-color: var(--bg-hover);
+}
+.workspace-ribbon .clickable-icon.is-active {
+  opacity: 1;
+  background-color: var(--bg-active);
+  color: var(--text-normal);
+}
+
+/* Icon buttons (view-actions, headers, tab bar): soft rounded highlight
+   panel on hover/active — the OpenCode client uses a rounded square, not a
+   hard rectangle, for selected toolbar buttons (image ref). */
+.clickable-icon {
+  border-radius: var(--oc-radius-control);
+}
+.clickable-icon:hover {
+  background-color: var(--bg-hover);
+}
+.clickable-icon.is-active {
+  background-color: var(--bg-active);
+  color: var(--text-normal);
+}
+
+/* Sidebar toggle icons — OpenCode 3-state interaction.
+   DevTools confirmed the real target is the inner .clickable-icon with
+   aria-label "sidebar-toggle-button-mod-left/right" (the previous rule
+   matched only the parent .sidebar-toggle-button container, so the
+   visible hover rectangle on the actual icon was left at its default
+   sharp corners). Now: default = fully frameless; hover = a faint
+   outline (not a fill), echoing OpenCode's chrome buttons; active =
+   a soft tint chip. All three states keep --oc-radius-control so the
+   shape is always rounded, never the raw rectangle you saw. */
+.workspace-tabs.mod-top-left-space .clickable-icon,
+.workspace-tabs.mod-top-right-space .clickable-icon,
+.sidebar-toggle-button .clickable-icon,
+.sidebar-toggle-button {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none;
+  border-radius: var(--oc-radius-control);
+}
+.workspace-tabs.mod-top-left-space .clickable-icon:hover,
+.workspace-tabs.mod-top-right-space .clickable-icon:hover,
+.sidebar-toggle-button .clickable-icon:hover,
+.sidebar-toggle-button:hover {
+  background-color: transparent !important;
+  box-shadow: inset 0 0 0 1px var(--border-hairline);
+}
+.workspace-tabs.mod-top-left-space .clickable-icon:active,
+.workspace-tabs.mod-top-right-space .clickable-icon:active,
+.sidebar-toggle-button .clickable-icon:active,
+.sidebar-toggle-button:active {
+  background-color: var(--bg-hover) !important;
+  box-shadow: none !important;
+}
+/* Do NOT override .sidebar-toggle-button padding or align-items.
+   Like the ribbon padding above, the native `8px 0 7px 0` keeps the
+   toggle arrow in its intended position relative to the icon column.
+   A prior override (7px/7px) was reverted because Folio — which
+   aligns correctly — leaves this entirely at the Obsidian default. */
+
+/* Hide help icon */
+svg[class*="help" i] { display: none !important; }
+.workspace-split.mod-left-split .clickable-icon:has(svg.lucide-help-circle),
+.workspace-split.mod-left-split .side-dock-ribbon-action:has(svg.lucide-help-circle) {
+  display: none !important;
+}
+
+/* Custom settings icon (sliders) */
+.workspace-ribbon .clickable-icon[aria-label*="Settings" i] svg,
+.workspace-ribbon .clickable-icon[aria-label*="设置" i] svg {
+  display: none !important;
+}
+.workspace-ribbon .clickable-icon[aria-label*="Settings" i]::before,
+.workspace-ribbon .clickable-icon[aria-label*="设置" i]::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-color: var(--text-muted);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 21v-7'/%3E%3Cpath d='M4 10V3'/%3E%3Cpath d='M12 21v-9'/%3E%3Cpath d='M12 8V3'/%3E%3Cpath d='M20 21v-5'/%3E%3Cpath d='M20 12V3'/%3E%3Cpath d='M1 14h6'/%3E%3Cpath d='M9 8h6'/%3E%3Cpath d='M17 16h6'/%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+.workspace-ribbon .clickable-icon[aria-label*="Settings" i]:hover::before,
+.workspace-ribbon .clickable-icon[aria-label*="设置" i]:hover::before {
+  background-color: var(--text-normal);
+}
+
+/* ============================================================
+    3. TABS
+    ============================================================ */
+/* .titlebar is defined in §15 alongside status-bar chrome. */
+
+/* Tabs — a single immersive bar. Everything is vertically centered to one
+   height; inactive tabs are plain text split by hairline dividers; the
+   active tab is a floating, content-colored panel that breaks the divider
+   rhythm (dividers around it are suppressed) so it reads as elevated.
+   Obsidian's folder-tab machinery is neutralized via its own variables:
+   --tab-curve:0 kills the decorative flares; --tab-divider-color is a
+   hairline; the active tab no longer merges into the content edge. */
+/* IMPORTANT — the floating-tab geometry below is scoped to .mod-root (the
+   main editor tab bar) ONLY. The same .workspace-tab-header* classes are
+   reused by the left/right SIDEBAR tab headers (File Explorer / Search /
+   Bookmarks leaf icons) and the frameless window-chrome spaces. Those rely on
+   native geometry — in particular the sidebar's container-inner `margin: 6px
+   0 0 0`, which drops the icon row to align with the absolutely-positioned
+   sidebar-toggle. An earlier UNSCOPED `margin: 0 !important` here killed that
+   6px and floated the sidebar icons ~2px high vs the toggle (the long-running
+   alignment bug). Keeping these under .mod-root leaves sidebar/chrome native. */
+
+/* Theming (colours / de-lining) is safe to apply to every tab bar. */
+.workspace-tab-header-container {
+  --tab-curve: 0px;
+  --tab-divider-color: var(--border-hairline);
+  --tab-radius: var(--oc-radius-control);
+  --tab-radius-active: var(--oc-radius-control);
+  --tab-background-active: var(--background-primary);
+  background-color: var(--background-secondary);
+  border-bottom: none;
+}
+
+/* Geometry — main editor tab bar only. */
+.mod-root .workspace-tab-header-container {
+  padding: 0 6px;
+  gap: 0;
+  align-items: center;
+}
+
+.mod-root .workspace-tab-header-container .workspace-tab-header-container-inner {
+  margin: 0 !important;
+  align-items: center;
+}
+
+/* Kill the native decorative curve pseudo-elements (harmless everywhere). */
+.workspace-tab-header-container .workspace-tab-header::before,
+.workspace-tab-header-container .workspace-tab-header::after {
+  display: none !important;
+}
+
+.mod-root .workspace-tab-header {
+  border: none;
+  background-color: transparent;
+  color: var(--text-muted);
+  border-radius: var(--oc-radius-control) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  transition: color 0.12s ease, background-color 0.12s ease, box-shadow 0.12s ease;
+  position: relative;
+  font-weight: 500;
+  font-size: 13px;
+  box-shadow: none !important;
+}
+
+/* The inner is the real pill: fixed height, centered, consistent padding. */
+.mod-root .workspace-tab-header .workspace-tab-header-inner {
+  background-color: transparent !important;
+  border-radius: var(--oc-radius-control);
+  height: 30px;
+  padding: 0 12px;
+  align-items: center;
+}
+
+/* Hairline divider between adjacent tabs (centered, short).
+   Obsidian's native divider uses absolute positioning with an implicit
+   `bottom:0` and `inset-inline-end:-0.5px`. Our custom height + top:50%
+   collided with that bottom constraint, so each divider landed at an
+   indeterminate y and the -0.5px end offset made them shimmer on the
+   tab boundary — the "chewed-up" look across the tab row. Reset both
+   axes so the divider geometry is fully ours: bottom cleared, end
+   pinned to 0 (no sub-pixel), top:50% + translateY centers it. */
+.workspace .mod-root .workspace-tab-header-inner::after {
+  top: 50%;
+  bottom: auto;
+  inset-inline-end: 0;
+  transform: translateY(-50%);
+  height: 16px;
+  width: 1px;
+  background-color: var(--tab-divider-color);
+}
+
+/* No divider hugging the active chip, or after the last tab. Main editor
+   only: sidebar tab headers reuse these class names and must keep native
+   active/hover geometry for vertical alignment. */
+.mod-root .workspace-tab-header.is-active .workspace-tab-header-inner::after,
+.mod-root .workspace-tab-header:has(+ .workspace-tab-header.is-active) .workspace-tab-header-inner::after,
+.mod-root .workspace-tab-header:last-child .workspace-tab-header-inner::after {
+  opacity: 0 !important;
+}
+
+/* Active = flat tinted chip: a subtle muted fill, no shadow, no outline.
+   The previous floating-panel treatment (white fill + drop shadow +
+   hairline ring) read as a hard white box against the dark bar — the
+   "ugly" you flagged. A low-opacity tint (rgba 0.06/0.05) keeps the
+   active state legible without screaming. */
+.workspace-split.mod-root .workspace-tab-header-container .workspace-tab-header.is-active {
+  color: var(--text-normal);
+  font-weight: 600;
+}
+.workspace-split.mod-root .workspace-tab-header-container .workspace-tab-header.is-active .workspace-tab-header-inner {
+  background-color: var(--bg-tab-active) !important;
+  box-shadow: none !important;
+  border: none;
+}
+
+/* Neutralize the native active-tab corner-merge shadows. */
+.workspace-split.mod-root .workspace-tab-header-container .workspace-tab-header.is-active::before,
+.workspace-split.mod-root .workspace-tab-header-container .workspace-tab-header.is-active::after {
+  box-shadow: none !important;
+}
+
+.workspace-split.mod-root .workspace-tab-header:hover:not(.is-active) .workspace-tab-header-inner {
+  background-color: var(--bg-hover) !important;
+}
+.workspace-split.mod-root .workspace-tab-header:hover:not(.is-active) {
+  color: var(--text-normal);
+}
+
+.workspace-split.mod-root .workspace-tab-header-inner-close-button {
+  color: var(--text-muted);
+}
+.workspace-split.mod-root .workspace-tab-header:hover .workspace-tab-header-inner-close-button {
+  color: var(--text-normal);
+}
+
+/* Pinned indicator — replace the lucide thumbtack with a short terminal-style
+   bar mark. Reads as a "fixed/anchored" glyph (like a cursor hold) and echoes
+   the monospace/terminal language better than a dot. On hover the close (×)
+   still works for unpinned tabs; pinned tabs show the bar at rest. */
+.workspace-split.mod-root .workspace-tab-header-inner-close-button.mod-pinned svg,
+.workspace-split.mod-root .workspace-tab-header-status-icon.mod-pinned svg {
+  display: none !important;
+}
+.workspace-split.mod-root .workspace-tab-header-inner-close-button.mod-pinned::before,
+.workspace-split.mod-root .workspace-tab-header-status-icon.mod-pinned::before {
+  content: '';
+  width: 10px;
+  height: 1.5px;
+  border-radius: 1px;
+  background-color: var(--text-muted);
+  flex-shrink: 0;
+}
+.workspace-split.mod-root .workspace-tab-header.is-active .workspace-tab-header-inner-close-button.mod-pinned::before,
+.workspace-split.mod-root .workspace-tab-header.is-active .workspace-tab-header-status-icon.mod-pinned::before {
+  background-color: var(--text-normal);
+}
+
+/* ============================================================
+   4. HEADINGS & TYPOGRAPHY
+   ============================================================ */
+.HyperMD-header,
+.markdown-rendered h1,
+.markdown-rendered h2,
+.markdown-rendered h3,
+.markdown-rendered h4,
+.markdown-rendered h5,
+.markdown-rendered h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--text-normal);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  border-bottom: none;
+}
+
+.HyperMD-header-1, .markdown-rendered h1 { font-size: 1.85em !important; margin-top: 1.6em; margin-bottom: 0.6em; font-weight: 700; }
+.HyperMD-header-2, .markdown-rendered h2 { font-size: 1.55em !important; margin-top: 1.4em; margin-bottom: 0.5em; }
+.HyperMD-header-3, .markdown-rendered h3 { font-size: 1.3em !important; margin-top: 1.2em; margin-bottom: 0.4em; }
+.HyperMD-header-4, .markdown-rendered h4 { font-size: 1.1em !important; font-weight: 600; margin-top: 1em; margin-bottom: 0.3em; color: var(--text-normal); }
+.HyperMD-header-5, .markdown-rendered h5 { font-size: 1em !important; font-weight: 600; color: var(--text-muted); margin-top: 0.8em; }
+.HyperMD-header-6, .markdown-rendered h6 { font-size: 0.95em !important; font-weight: 600; color: var(--text-muted); }
+
+strong, b { font-weight: 700; color: var(--text-normal); }
+a { color: var(--text-accent); text-decoration: none; transition: color 0.12s ease; }
+a:hover { color: var(--text-accent-hover); text-decoration: underline; }
+
+.markdown-rendered hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 2em 0;
+}
+
+.markdown-rendered blockquote {
+  border-left: 2px solid var(--border-color);
+  padding-left: 1em;
+  color: var(--text-muted);
+  font-style: normal;
+}
+
+.markdown-rendered blockquote p {
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   5. TABLE
+   ============================================================ */
+.markdown-rendered table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.2em 0;
+  border: none;
+  font-size: 0.95em;
+  /* Kill Obsidian's native column zebra striping (app.css:12720-12722 gives
+     even columns --table-column-alt-background) and row alternation — the
+     faint vertical stripes only show on hover, which reads as "亮一格暗一格".
+     Transparent = uniform single background across all cells. */
+  --table-column-alt-background: transparent;
+  --table-row-alt-background: transparent;
+  --table-row-alt-background-hover: transparent;
+}
+
+.markdown-rendered thead {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.markdown-rendered tbody {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.markdown-rendered th {
+  background-color: transparent;
+  font-weight: 700;
+  color: var(--text-normal);
+  text-align: left;
+  padding: 10px 16px 10px 0;
+  border: none;
+  font-size: 0.95em;
+  line-height: 1.4;
+}
+
+.markdown-rendered td {
+  padding: 10px 16px 10px 0;
+  border: none;
+  border-bottom: 1px solid var(--border-hairline);
+  vertical-align: top;
+  line-height: 1.55;
+}
+
+.markdown-rendered tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Row hover tint. Applied to the <tr>, not each <td>, so the highlight
+   reads as one continuous band — setting it per-cell can make the row
+   look striped ("亮一格暗一格") when cells carry different inner
+   backgrounds (e.g. inline code) or when border-collapse leaves hairline
+   seams. The tr-level background paints behind all cells uniformly. */
+.markdown-rendered tbody tr:hover {
+  background-color: var(--bg-hover);
+}
+
+.markdown-rendered td code,
+.markdown-rendered th code {
+  font-family: var(--font-monospace);
+  font-size: 0.88em;
+  font-weight: 600;
+  color: var(--text-accent);
+  background-color: transparent;
+  padding: 0;
+  border: none;
+}
+
+.markdown-rendered th:first-child,
+.markdown-rendered td:first-child {
+  padding-left: 4px;
+}
+
+/* Compact tables */
+.markdown-rendered table[data-compact] td,
+.markdown-rendered table[data-compact] th {
+  padding: 6px 12px 6px 0;
+}
+
+/* ============================================================
+   6. CALLOUT (STARLIGHT ASIDE STYLE)
+   ============================================================ */
+.callout {
+  background-color: var(--callout-info-bg);
+  border: none;
+  border-left: 3px solid var(--callout-info-text);
+  border-radius: 0;
+  padding: 12px 16px;
+  margin: 1.2em 0;
+  box-shadow: none;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.callout-title {
+  color: var(--callout-info-text);
+  font-weight: 600;
+  font-size: 0.9em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-default);
+  flex: 0 0 auto;
+  min-width: auto;
+  line-height: 1.5;
+}
+
+.callout-title-inner {
+  font-weight: 600;
+  color: var(--callout-info-text);
+}
+
+.callout-icon {
+  color: var(--callout-info-text);
+  display: flex;
+  align-items: center;
+  width: 16px;
+  height: 16px;
+}
+
+.callout-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.callout-content {
+  color: var(--text-normal);
+  font-size: 0.95em;
+  line-height: 1.6;
+  flex: 1 1 auto;
+  margin: 0;
+  padding-top: 1px;
+}
+
+.callout-content p {
+  margin: 0;
+}
+
+.callout-content > * + * {
+  margin-top: 0.6em;
+}
+
+.callout-content a {
+  color: var(--callout-info-text);
+  text-decoration: underline;
+}
+
+.callout-content code {
+  font-family: var(--font-monospace);
+  font-size: 0.85em;
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 2px 5px;
+  border-radius: 0;
+}
+
+.theme-dark .callout-content code {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Default / abstract / summary / question / quote -> neutral muted blue */
+.callout[data-callout="abstract"],
+.callout[data-callout="summary"],
+.callout[data-callout="question"],
+.callout[data-callout="quote"],
+.callout[data-callout="example"] {
+  background-color: var(--callout-info-bg);
+  border-left-color: var(--callout-info-text);
+}
+
+.callout[data-callout="abstract"] .callout-title,
+.callout[data-callout="summary"] .callout-title,
+.callout[data-callout="question"] .callout-title,
+.callout[data-callout="quote"] .callout-title,
+.callout[data-callout="example"] .callout-title,
+.callout[data-callout="abstract"] .callout-title-inner,
+.callout[data-callout="summary"] .callout-title-inner,
+.callout[data-callout="question"] .callout-title-inner,
+.callout[data-callout="quote"] .callout-title-inner,
+.callout[data-callout="example"] .callout-title-inner,
+.callout[data-callout="abstract"] .callout-icon,
+.callout[data-callout="summary"] .callout-icon,
+.callout[data-callout="question"] .callout-icon,
+.callout[data-callout="quote"] .callout-icon,
+.callout[data-callout="example"] .callout-icon {
+  color: var(--callout-info-text);
+}
+
+/* Note / info -> blue */
+.callout[data-callout="note"],
+.callout[data-callout="info"] {
+  background-color: var(--callout-info-bg);
+  border-left-color: var(--callout-info-text);
+}
+
+.callout[data-callout="note"] .callout-title,
+.callout[data-callout="info"] .callout-title,
+.callout[data-callout="note"] .callout-title-inner,
+.callout[data-callout="info"] .callout-title-inner,
+.callout[data-callout="note"] .callout-icon,
+.callout[data-callout="info"] .callout-icon {
+  color: var(--callout-info-text);
+}
+
+/* Tip -> purple */
+.callout[data-callout="tip"] {
+  background-color: rgba(175, 82, 222, 0.10);
+  border-left-color: #af52de;
+}
+
+.callout[data-callout="tip"] .callout-title,
+.callout[data-callout="tip"] .callout-title-inner,
+.callout[data-callout="tip"] .callout-icon {
+  color: #af52de;
+}
+
+.theme-light .callout[data-callout="tip"] {
+  background-color: rgba(175, 82, 222, 0.08);
+}
+
+/* Success -> green */
+.callout[data-callout="success"],
+.callout[data-callout="check"],
+.callout[data-callout="done"] {
+  background-color: var(--callout-success-bg);
+  border-left-color: var(--callout-success-text);
+}
+
+.callout[data-callout="success"] .callout-title,
+.callout[data-callout="check"] .callout-title,
+.callout[data-callout="done"] .callout-title,
+.callout[data-callout="success"] .callout-title-inner,
+.callout[data-callout="check"] .callout-title-inner,
+.callout[data-callout="done"] .callout-title-inner,
+.callout[data-callout="success"] .callout-icon,
+.callout[data-callout="check"] .callout-icon,
+.callout[data-callout="done"] .callout-icon {
+  color: var(--callout-success-text);
+}
+
+/* Warning / caution / attention -> orange */
+.callout[data-callout="warning"],
+.callout[data-callout="caution"],
+.callout[data-callout="attention"] {
+  background-color: var(--callout-warning-bg);
+  border-left-color: var(--callout-warning-text);
+}
+
+.callout[data-callout="warning"] .callout-title,
+.callout[data-callout="caution"] .callout-title,
+.callout[data-callout="attention"] .callout-title,
+.callout[data-callout="warning"] .callout-title-inner,
+.callout[data-callout="caution"] .callout-title-inner,
+.callout[data-callout="attention"] .callout-title-inner,
+.callout[data-callout="warning"] .callout-icon,
+.callout[data-callout="caution"] .callout-icon,
+.callout[data-callout="attention"] .callout-icon {
+  color: var(--callout-warning-text);
+}
+
+/* Danger / error / bug / failure / fail / missing -> red */
+.callout[data-callout="danger"],
+.callout[data-callout="error"],
+.callout[data-callout="bug"],
+.callout[data-callout="failure"],
+.callout[data-callout="fail"],
+.callout[data-callout="missing"] {
+  background-color: var(--callout-error-bg);
+  border-left-color: var(--callout-error-text);
+}
+
+.callout[data-callout="danger"] .callout-title,
+.callout[data-callout="error"] .callout-title,
+.callout[data-callout="bug"] .callout-title,
+.callout[data-callout="danger"] .callout-title-inner,
+.callout[data-callout="error"] .callout-title-inner,
+.callout[data-callout="bug"] .callout-title-inner,
+.callout[data-callout="danger"] .callout-icon,
+.callout[data-callout="error"] .callout-icon,
+.callout[data-callout="bug"] .callout-icon {
+  color: var(--callout-error-text);
+}
+
+/* ============================================================
+   7. CODE BLOCKS
+   ============================================================ */
+.markdown-rendered pre {
+  /* Softer, filled code surface (subtle tint + hairline) instead of a hard
+     1px box on the page colour — reads cleaner / more modern. */
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-hairline);
+  border-radius: 0;
+  padding: 0;
+  margin: 1.4em 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.markdown-rendered pre code {
+  padding: 16px 18px;
+  display: block;
+  font-family: var(--font-monospace);
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text-normal);
+  background-color: transparent;
+  overflow-x: auto;
+  tab-size: 2;
+}
+
+.markdown-rendered code:not(pre code) {
+  font-family: var(--font-monospace);
+  font-size: 0.85em;
+  font-weight: 600;
+  color: var(--text-accent);
+  background-color: var(--bg-secondary);
+  border: none;
+  padding: 2px 6px;
+  border-radius: 0;
+  line-height: 1.4;
+}
+
+/* Code block language label — single header bar above the code.
+   CSS can't strip the "language-" prefix from attr(class), so we
+   map common languages explicitly; unknown ones fall back to a
+   generic glyph so we never print "language-xxx" verbatim. */
+.markdown-rendered pre:has(> code[class*="language-"])::before {
+  display: block;
+  padding: 6px 18px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-hairline);
+  background-color: var(--bg-secondary);
+  font-family: var(--font-default);
+}
+
+.markdown-rendered pre > code[class*="language-"]::before { display: none !important; }
+
+.markdown-rendered pre:has(> code.language-js)::before,
+.markdown-rendered pre:has(> code.language-javascript)::before { content: 'JavaScript'; }
+.markdown-rendered pre:has(> code.language-ts)::before,
+.markdown-rendered pre:has(> code.language-typescript)::before { content: 'TypeScript'; }
+.markdown-rendered pre:has(> code.language-py)::before,
+.markdown-rendered pre:has(> code.language-python)::before { content: 'Python'; }
+.markdown-rendered pre:has(> code.language-css)::before { content: 'CSS'; }
+.markdown-rendered pre:has(> code.language-scss)::before,
+.markdown-rendered pre:has(> code.language-less)::before { content: 'CSS'; }
+.markdown-rendered pre:has(> code.language-html)::before { content: 'HTML'; }
+.markdown-rendered pre:has(> code.language-json)::before { content: 'JSON'; }
+.markdown-rendered pre:has(> code.language-yaml)::before,
+.markdown-rendered pre:has(> code.language-yml)::before { content: 'YAML'; }
+.markdown-rendered pre:has(> code.language-md)::before,
+.markdown-rendered pre:has(> code.language-markdown)::before { content: 'Markdown'; }
+.markdown-rendered pre:has(> code.language-bash)::before,
+.markdown-rendered pre:has(> code.language-shell)::before,
+.markdown-rendered pre:has(> code.language-sh)::before,
+.markdown-rendered pre:has(> code.language-zsh)::before { content: 'Shell'; }
+.markdown-rendered pre:has(> code.language-go)::before { content: 'Go'; }
+.markdown-rendered pre:has(> code.language-rust)::before,
+.markdown-rendered pre:has(> code.language-rs)::before { content: 'Rust'; }
+.markdown-rendered pre:has(> code.language-java)::before { content: 'Java'; }
+.markdown-rendered pre:has(> code.language-c)::before { content: 'C'; }
+.markdown-rendered pre:has(> code.language-cpp)::before { content: 'C++'; }
+.markdown-rendered pre:has(> code.language-sql)::before { content: 'SQL'; }
+.markdown-rendered pre:has(> code.language-diff)::before { content: 'Diff'; }
+.markdown-rendered pre:has(> code.language-toml)::before { content: 'TOML'; }
+.markdown-rendered pre:has(> code.language-dockerfile)::before { content: 'Dockerfile'; }
+.markdown-rendered pre:has(> code.language-xml)::before { content: 'XML'; }
+.markdown-rendered pre:has(> code.language-r)::before { content: 'R'; }
+.markdown-rendered pre:has(> code.language-ruby)::before,
+.markdown-rendered pre:has(> code.language-rb)::before { content: 'Ruby'; }
+.markdown-rendered pre:has(> code.language-php)::before { content: 'PHP'; }
+.markdown-rendered pre:has(> code.language-swift)::before { content: 'Swift'; }
+.markdown-rendered pre:has(> code.language-kotlin)::before { content: 'Kotlin'; }
+.markdown-rendered pre:has(> code.language-text)::before,
+.markdown-rendered pre:has(> code.language-plaintext)::before { content: 'Text'; }
+
+/* Copy code button */
+/* Code block copy button — disabled by design choice. Obsidian natively
+   shows it on pre:hover (app.css:10552); we kill it unconditionally in
+   both reading mode and edit/source/live-preview modes. */
+.markdown-rendered button.copy-code-button,
+.markdown-rendered pre:hover button.copy-code-button,
+.markdown-rendered pre > button.copy-code-button,
+.markdown-source-view button.copy-code-button,
+.markdown-source-view pre:hover button.copy-code-button,
+.markdown-source-view pre > button.copy-code-button,
+.cm-editor button.copy-code-button,
+.cm-editor pre:hover button.copy-code-button,
+.cm-editor pre > button.copy-code-button,
+.copy-code-button {
+  display: none !important;
+}
+
+/* Code block with language label needs inner code padding adjustment */
+.markdown-rendered pre[class*="language-"] code,
+.markdown-rendered pre:has(> code[class*="language-"]) code {
+  padding-top: 12px;
+}
+
+/* ============================================================
+   8. CHECKBOXES & LISTS
+   ============================================================ */
+/* Checkboxes are fully variable-driven (see the token blocks:
+   --checkbox-color / --checkbox-marker-color / --checkbox-radius). Obsidian
+   renders the crisp centered SVG tick itself; done-task fade + no
+   strikethrough come from --checklist-done-color / -decoration. Nothing to
+   override here. */
+.markdown-rendered ul > li, .markdown-rendered ol > li { margin-bottom: 4px; }
+
+.markdown-rendered ul, .markdown-rendered ol {
+  padding-left: 1.4em;
+}
+
+.markdown-rendered li > ul, .markdown-rendered li > ol {
+  margin-top: 4px;
+}
+
+/* ============================================================
+   9. SETTINGS & MODALS
+   ============================================================ */
+.modal {
+  background-color: var(--background-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--oc-radius-modal);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+/* Settings window shares the rounded frame; its inner sidebar must clip to
+   the same radius so the top-left corner isn't a square poking out. */
+.modal.mod-settings,
+.modal.mod-settings .vertical-tab-header {
+  border-top-left-radius: var(--oc-radius-modal);
+  border-bottom-left-radius: var(--oc-radius-modal);
+}
+
+/* .prompt and .prompt-input are defined in §13 to keep all
+   command-palette rules together. */
+
+/* Settings Sidebar separation */
+.vertical-tab-header {
+  background-color: var(--background-secondary);
+  border-right: 1px solid var(--border-hairline);
+}
+.vertical-tab-content-container {
+  background-color: var(--background-primary);
+}
+
+.vertical-tab-nav-item {
+  border-radius: 0;
+  padding: 7px 12px 7px 14px;
+  margin: 1px 0;
+  transition: background-color 0.12s ease;
+  display: flex;
+  align-items: center;
+  color: var(--text-muted);
+}
+
+/* Hide native settings icons */
+.vertical-tab-nav-item-icon {
+  display: none !important;
+}
+
+.vertical-tab-nav-item.is-active {
+  background-color: var(--bg-active);
+  border: none;
+  border-left: 2px solid var(--text-normal);
+  color: var(--text-normal);
+  font-weight: 600;
+}
+
+.vertical-tab-nav-item:hover:not(.is-active) {
+  background-color: var(--bg-hover);
+}
+
+.setting-item {
+  border-top: 1px solid var(--border-hairline);
+  padding: 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.setting-item-info {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.setting-item-control {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-height: 28px;
+}
+.setting-item-name {
+  font-weight: 600;
+  font-size: 0.95em;
+  color: var(--text-normal);
+}
+.setting-item-description {
+  font-size: 0.85em;
+  color: var(--text-muted);
+  margin-top: 2px;
+  line-height: 1.5;
+}
+
+/* Toggle switch — OpenCode desktop pill style.
+   We do NOT override ::after geometry. Obsidian's knob is positioned
+   by --toggle-* variables via margin-top + translate3d; fighting that
+   with top/left (as before) loses against .mod-macos redefining the
+   sizes and produces the off-center knob you saw. Setting the tokens
+   instead makes the math close exactly: container height equals
+   thumb-height + border*2, and margin-top = border, so the knob is
+   vertically centered by construction on every platform. */
+.checkbox-container {
+  background-color: var(--oc-toggle-off);
+  transition: background-color 0.15s ease;
+}
+
+.checkbox-container.is-enabled {
+  background-color: var(--oc-toggle-on);
+}
+
+/* Knob: subtle shadow so it reads as a raised square on either track. */
+.checkbox-container::after {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+/* Buttons */
+button, .mod-cta {
+  border-radius: var(--oc-radius-control) !important;
+  font-family: var(--font-default);
+  transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+button.mod-cta {
+  background-color: var(--text-normal);
+  color: var(--background-primary);
+  border: 1px solid var(--text-normal);
+  padding: 6px 16px;
+  font-size: 13px;
+}
+
+button.mod-cta:hover {
+  background-color: var(--text-muted);
+  border-color: var(--text-muted);
+  color: var(--background-primary);
+}
+
+button:not(.mod-cta):not(.clickable-icon) {
+  background-color: var(--background-secondary);
+  color: var(--text-normal);
+  border: 1px solid var(--border-color);
+  padding: 6px 14px;
+  font-size: 13px;
+}
+
+button:not(.mod-cta):not(.clickable-icon):hover {
+  background-color: var(--background-tertiary);
+  border-color: var(--border-hover);
+}
+
+/* Small buttons (inline, compact) */
+button:not(.mod-cta):not(.clickable-icon).mod-small,
+button.mod-cta.mod-small {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+/* Large buttons */
+button:not(.mod-cta):not(.clickable-icon).mod-large,
+button.mod-cta.mod-large {
+  padding: 8px 20px;
+  font-size: 14px;
+}
+
+/* Select / Dropdown — borderless OpenCode style.
+   No rectangle; just the current value + a chevron. Arrow color is
+   injected per-theme (dark mode needs a light stroke) and the whole
+   control only gains a faint hover/focus tint, never a box outline.
+   width: fit-content keeps the box snug around the selected value
+   instead of stretching to the longest <option> — without it a long
+   entry like "移至系统回收站" inflates the box and shoves the chosen
+   short value to the far left with dead space on the right. */
+select,
+.dropdown,
+.setting-item .dropdown,
+.setting-item-control .dropdown,
+.vertical-tab-content .dropdown,
+.modal-content .dropdown {
+  border-radius: var(--oc-radius-control) !important;
+  border: none !important;
+  background-color: transparent !important;
+  padding: 4px 22px 4px 8px !important;
+  font-family: var(--font-default) !important;
+  font-size: 0.95em;
+  color: var(--text-normal);
+  transition: background-color 0.12s ease;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  background-image: var(--oc-dropdown-arrow) !important;
+  background-repeat: no-repeat !important;
+  background-position: right 4px center !important;
+  background-size: 12px !important;
+  box-shadow: none !important;
+  min-height: 28px;
+  /* A native <select> sizes its width to the WIDEST <option>, so the box
+     stays wide and strands the short selected value on the left with dead
+     space on the right. field-sizing:content makes the control size to the
+     CURRENTLY SELECTED value instead — the box hugs "简体中文" + chevron.
+     (Chromium >=123, which Obsidian 1.12 ships.) fit-content is kept as a
+     fallback for older builds. */
+  field-sizing: content !important;
+  width: fit-content !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  text-align: left;
+}
+
+select:hover,
+.dropdown:hover,
+.setting-item .dropdown:hover,
+.setting-item-control .dropdown:hover,
+.vertical-tab-content .dropdown:hover,
+.modal-content .dropdown:hover {
+  background-color: var(--bg-hover) !important;
+}
+
+select:focus,
+.dropdown:focus,
+.setting-item .dropdown:focus,
+.setting-item-control .dropdown:focus,
+.vertical-tab-content .dropdown:focus,
+.modal-content .dropdown:focus {
+  outline: none;
+  box-shadow: none !important;
+  background-color: var(--bg-hover) !important;
+}
+input[type="text"], input[type="search"], input[type="password"], input[type="url"], input[type="number"], textarea {
+  border-radius: var(--oc-radius-control);
+  border: 1px solid var(--border-color);
+  background-color: var(--background-primary);
+  color: var(--text-normal);
+  font-family: var(--font-default);
+  padding: 6px 12px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+input[type="text"]:focus, input[type="search"]:focus, textarea:focus {
+  border-color: var(--text-normal);
+  box-shadow: 0 0 0 1.5px var(--border-color);
+  outline: none;
+}
+
+/* Search fields carry a magnifier ::before icon (~36px gutter). Our generic
+   input padding above clobbers Obsidian's padding-inline-start and the icon
+   overlaps the placeholder (e.g. the settings "置顶命令" search). Restore it. */
+.search-input-container input[type="search"],
+.search-input-container input[type="text"] {
+  padding-inline-start: 34px;
+}
+
+/* ============================================================
+   10. TAGS
+   ============================================================ */
+a.tag, .tag {
+  background-color: var(--background-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--oc-radius);
+  padding: 3px 10px;
+  font-size: 0.8em;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-decoration: none !important;
+  font-family: var(--font-default);
+  transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+  display: inline-block;
+  line-height: 1.4;
+}
+
+a.tag:hover, .tag:hover {
+  background-color: var(--bg-hover);
+  color: var(--text-normal);
+  border-color: var(--border-hover);
+}
+
+/* ============================================================
+   11. RIGHT SIDEBAR / OUTLINE / BACKLINKS
+   ============================================================ */
+.workspace-split.mod-right-split .view-content {
+  background-color: var(--background-secondary);
+  padding: 8px 0;
+}
+
+/* --- Auto-collapsing sidebar toolbars (both side splits) ---------------
+   The top function bar (new note / sort / outline switches …) is hidden by
+   default and slides open on hover, leaving a small drag-handle hint — same
+   pattern as Folio, adapted to Opendian's tokens. Keeps the rail clean. */
+.workspace-split.mod-left-split .nav-header,
+.workspace-split.mod-right-split .nav-header {
+  height: auto !important;
+  min-height: 12px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  background-color: transparent !important;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 10;
+  flex-shrink: 0 !important;
+}
+
+/* Drag-handle hint pill, fades out on hover */
+.workspace-split.mod-left-split .nav-header::before,
+.workspace-split.mod-right-split .nav-header::before {
+  content: "";
+  display: block;
+  width: 28px;
+  height: 3px;
+  border-radius: 99px;
+  background-color: var(--border-color);
+  margin: 7px auto 0 auto;
+  transition: opacity 0.2s ease;
+  flex-shrink: 0;
+}
+.workspace-split.mod-left-split .nav-header:hover::before,
+.workspace-split.mod-right-split .nav-header:hover::before {
+  opacity: 0;
+}
+
+.workspace-split.mod-left-split .nav-header-title,
+.workspace-split.mod-right-split .nav-header-title {
+  display: none !important;
+}
+
+/* Collapsed by default; expands on hover */
+.workspace-split.mod-left-split .nav-buttons-container,
+.workspace-split.mod-right-split .nav-buttons-container {
+  display: flex !important;
+  justify-content: center;
+  gap: 4px;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  margin: 0 !important;
+  padding: 0 8px;
+  pointer-events: none;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  transition: max-height 0.28s cubic-bezier(0.25, 0.8, 0.25, 1),
+              opacity 0.18s ease, margin 0.28s ease;
+}
+.workspace-split.mod-left-split .nav-header:hover .nav-buttons-container,
+.workspace-split.mod-right-split .nav-header:hover .nav-buttons-container {
+  max-height: 40px;
+  opacity: 1;
+  margin: 6px 0 !important;
+  pointer-events: auto;
+}
+
+.workspace-split.mod-left-split .nav-buttons-container .clickable-icon,
+.workspace-split.mod-right-split .nav-buttons-container .clickable-icon {
+  opacity: 0.6;
+  color: var(--text-muted);
+  border-radius: var(--oc-radius-control);
+  transition: opacity 0.18s ease, color 0.18s ease, background-color 0.18s ease;
+}
+.workspace-split.mod-left-split .nav-buttons-container .clickable-icon:hover,
+.workspace-split.mod-right-split .nav-buttons-container .clickable-icon:hover {
+  opacity: 1;
+  color: var(--text-normal);
+  background-color: var(--bg-hover);
+}
+.workspace-split.mod-left-split .nav-buttons-container .clickable-icon.is-active,
+.workspace-split.mod-right-split .nav-buttons-container .clickable-icon.is-active {
+  opacity: 1;
+  color: var(--text-normal);
+  background-color: var(--bg-active);
+}
+
+/* Force uniform icon geometry across all sidebar icons. Borrowed from the
+   Folio theme (proven to align): different lucide icons ship at slightly
+   different default sizes, which makes the column read as jagged. Pinning
+   every sidebar icon to 16px / 1.5px stroke gives a crisp, even rail and
+   is the single biggest contributor to the "polished" feel. */
+.workspace-split.mod-left-split .nav-buttons-container .clickable-icon svg,
+.workspace-split.mod-right-split .nav-buttons-container .clickable-icon svg,
+.workspace-split.mod-left-split .view-actions .clickable-icon svg,
+.workspace-split.mod-right-split .view-actions .clickable-icon svg {
+  width: 16px !important;
+  height: 16px !important;
+  stroke-width: 1.5px !important;
+}
+
+/* Pixel-perfect top alignment of left & right sidebar content. The two
+   panes have different internal padding stacks, so their first rows sit
+   at different y even when the icons themselves are aligned. Normalize
+   the content area's top padding and zero out the first child's margin
+   so both rails start at the same baseline. (Technique from Folio.) */
+.workspace-split.mod-left-split .view-content,
+.workspace-split.mod-right-split .view-content {
+  padding-top: 10px !important;
+}
+.workspace-split.mod-left-split .view-content > :first-child,
+.workspace-split.mod-right-split .view-content > :first-child {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+/* Tree items used in outline, backlinks, tag pane */
+.tree-item-self {
+  padding: 5px 10px 5px 14px;
+  border-radius: 0;
+  margin: 1px 0;
+  color: var(--text-normal);
+  border-left: 2px solid transparent;
+  transition: background-color 0.12s ease, color 0.12s ease;
+  line-height: 1.5;
+}
+
+.tree-item-self:hover:not(.is-active) {
+  background-color: var(--bg-hover);
+}
+
+.tree-item-self.is-active {
+  background-color: var(--bg-active);
+  border-left: 2px solid var(--text-normal);
+  color: var(--text-normal);
+  font-weight: 600;
+}
+
+.tree-item-self .tree-item-inner {
+  color: var(--text-normal);
+}
+
+.tree-item-self.is-active .tree-item-inner {
+  color: var(--text-normal);
+}
+
+.tree-item-flair,
+.tree-item-self .tree-item-flair {
+  color: var(--text-muted);
+  font-size: 0.8em;
+  font-weight: 500;
+}
+
+.tree-item-children {
+  padding-left: 14px;
+  border-left: 1px solid var(--border-hairline);
+  margin-left: 14px;
+}
+
+/* Search input in right sidebar */
+.workspace-split.mod-right-split input[type="search"] {
+  background-color: var(--background-primary);
+  border: 1px solid var(--border-color);
+}
+
+/* ============================================================
+   12. SCROLLBARS
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--border-color);
+  border-radius: 99px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-muted);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ============================================================
+   13. PROMPT / COMMAND PALETTE
+   ============================================================ */
+.prompt {
+  border-radius: var(--oc-radius-panel);
+  background-color: var(--background-primary);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.prompt-input {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-color) !important;
+  border-radius: 0;
+  font-family: var(--font-default);
+  padding: 14px 18px;
+  font-size: 14px;
+  color: var(--text-normal);
+}
+
+.prompt-results {
+  padding: 6px 0;
+}
+
+.suggestion-item {
+  padding: 8px 12px;
+  border-radius: var(--oc-radius);
+  margin: 0 6px;
+  color: var(--text-normal);
+  transition: background-color 0.12s ease;
+}
+
+.suggestion-item.is-selected {
+  background-color: var(--bg-active);
+  color: var(--text-normal);
+}
+
+.suggestion-item .suggestion-title {
+  font-weight: 600;
+  color: var(--text-normal);
+}
+
+.suggestion-item .suggestion-note {
+  color: var(--text-muted);
+  font-size: 0.85em;
+}
+
+.suggestion-item.is-selected .suggestion-title,
+.suggestion-item.is-selected .suggestion-note {
+  color: var(--text-normal);
+}
+
+/* ============================================================
+   14. TOOLTIPS / MENUS / DROPDOWNS
+   ============================================================ */
+.tooltip {
+  background-color: var(--background-tertiary);
+  color: var(--text-normal);
+  border: 1px solid var(--border-color);
+  border-radius: var(--oc-radius-control);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  font-family: var(--font-default);
+  font-size: 12px;
+  padding: 6px 10px;
+  /* Hide the speech-bubble arrow. Obsidian draws it with a border-trick
+     triangle colored by --background-modifier-message (a fixed dark gray),
+     which never matches our custom --background-tertiary fill and carries
+     no outline — so where the arrow meets the box the border line visibly
+     breaks ("missing line"). A clean borderless rectangle reads better
+     than a mismatched half-bordered bubble, and suits the OpenCode
+     minimal popover style. */
+  overflow: visible;
+}
+.tooltip .tooltip-arrow {
+  display: none;
+}
+
+.menu {
+  background-color: var(--background-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--oc-radius-panel);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  padding: 5px;
+}
+
+/* Menu items get a rounded hover/selected pill inside the rounded menu
+   (was a hard-edged 0px row — the obvious right-angle you spotted). */
+.menu-item {
+  border-radius: var(--oc-radius);
+  padding: 7px 10px;
+  margin: 0;
+  color: var(--text-normal);
+  transition: background-color 0.12s ease;
+}
+
+.menu-item:hover {
+  background-color: var(--bg-hover);
+}
+
+.menu-item.is-selected {
+  background-color: var(--bg-active);
+  color: var(--text-normal);
+}
+
+.menu-item-icon {
+  color: var(--text-muted);
+}
+
+.menu-separator {
+  border-bottom: 1px solid var(--border-color);
+  margin: 4px 0;
+}
+
+/* ============================================================
+   15. STATUS BAR & TITLE BAR
+   ============================================================ */
+.status-bar {
+  background-color: var(--background-secondary);
+  border-top: 1px solid var(--border-hairline);
+  color: var(--text-muted);
+  font-size: 12px;
+  padding: 0 10px;
+}
+
+.status-bar-item {
+  padding: 0 8px;
+  border-radius: var(--oc-radius);
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.status-bar-item:hover {
+  background-color: var(--bg-hover);
+  color: var(--text-normal);
+}
+
+.status-bar-item.mod-clickable {
+  cursor: pointer;
+}
+
+.titlebar {
+  background-color: var(--background-secondary);
+  border-bottom: none;
+}
+
+.titlebar-button {
+  color: var(--text-muted);
+  opacity: 0.6;
+  transition: opacity 0.12s ease, background-color 0.12s ease;
+}
+
+.titlebar-button:hover {
+  opacity: 1;
+  background-color: var(--bg-hover);
+}
+
+/* ============================================================
+   16. SYNTAX HIGHLIGHTING (BASIC FALLBACK)
+   ============================================================ */
+.cm-keyword, .cm-operator,
+.markdown-rendered pre code .token.keyword,
+.markdown-rendered pre code .token.operator {
+  color: #b392f0;
+}
+
+.cm-string, .cm-string-2,
+.markdown-rendered pre code .token.string,
+.markdown-rendered pre code .token.url {
+  color: #9ecbff;
+}
+
+.cm-number,
+.markdown-rendered pre code .token.number {
+  color: #79b8ff;
+}
+
+.cm-comment,
+.markdown-rendered pre code .token.comment {
+  color: #99a0a6;
+}
+
+.cm-variable, .cm-variable-2, .cm-variable-3,
+.markdown-rendered pre code .token.variable,
+.markdown-rendered pre code .token.parameter {
+  color: var(--text-normal);
+}
+
+.cm-property,
+.markdown-rendered pre code .token.property {
+  color: #79b8ff;
+}
+
+.cm-tag,
+.markdown-rendered pre code .token.tag {
+  color: #85e89d;
+}
+
+.cm-attribute,
+.markdown-rendered pre code .token.attr-name {
+  color: #b392f0;
+}
+
+.cm-function,
+.markdown-rendered pre code .token.function {
+  color: #b392f0;
+}
+
+.theme-light .cm-keyword, .theme-light .cm-operator,
+.theme-light .markdown-rendered pre code .token.keyword,
+.theme-light .markdown-rendered pre code .token.operator {
+  color: #6f42c1;
+}
+
+.theme-light .cm-string, .theme-light .cm-string-2,
+.theme-light .markdown-rendered pre code .token.string,
+.theme-light .markdown-rendered pre code .token.url {
+  color: #032f62;
+}
+
+.theme-light .cm-number,
+.theme-light .markdown-rendered pre code .token.number {
+  color: #005cc5;
+}
+
+.theme-light .cm-comment,
+.theme-light .markdown-rendered pre code .token.comment {
+  color: #616972;
+}
+
+.theme-light .cm-property,
+.theme-light .markdown-rendered pre code .token.property {
+  color: #005cc5;
+}
+
+.theme-light .cm-tag,
+.theme-light .markdown-rendered pre code .token.tag {
+  color: #22863a;
+}
+
+/* ============================================================
+    17. EDITOR / SOURCE MODE PARITY
+    ============================================================ */
+
+/* Source mode background */
+.markdown-source-view .cm-editor {
+  background-color: var(--background-primary);
+}
+
+.markdown-source-view .cm-content,
+.markdown-source-view .cm-line {
+  font-family: var(--font-monospace);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text-normal);
+}
+
+/* Headings in source (editor) mode.
+   CRITICAL: font-size is set ONLY on the line-level .HyperMD-header-N
+   classes (see §4). The span-level .cm-header-N here must NOT repeat
+   font-size — Obsidian wraps the span inside the HyperMD line, so a
+   size on both layers multiplies (e.g. 1.85em × 1.85em ≈ 3.4x), which
+   is why headings looked much bigger in edit mode than reading mode
+   despite identical declared values. Here we keep only color/weight. */
+.markdown-source-view .cm-header {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--text-normal);
+}
+
+.markdown-source-view .cm-header-1 { font-weight: 700; }
+.markdown-source-view .cm-header-5 { color: var(--text-muted); }
+.markdown-source-view .cm-header-6 { color: var(--text-muted); }
+
+/* Markdown formatting markers */
+.markdown-source-view .cm-formatting {
+  color: var(--text-muted);
+}
+
+.markdown-source-view .cm-formatting-list {
+  color: var(--text-muted);
+}
+
+.markdown-source-view .cm-formatting-task {
+  color: var(--text-muted);
+}
+
+.markdown-source-view .cm-formatting-quote {
+  color: var(--text-muted);
+}
+
+.markdown-source-view .cm-formatting-code {
+  color: var(--text-accent);
+}
+
+.markdown-source-view .cm-formatting-link {
+  color: var(--text-accent);
+}
+
+/* Links in source mode */
+.markdown-source-view .cm-link {
+  color: var(--text-accent);
+}
+
+.markdown-source-view .cm-url {
+  color: var(--text-accent);
+}
+
+/* Inline code in source mode */
+.markdown-source-view .cm-inline-code {
+  font-family: var(--font-monospace);
+  color: var(--text-accent);
+  background-color: var(--bg-secondary);
+  border: none;
+  padding: 1px 5px;
+  border-radius: 0;
+}
+
+/* Selection */
+.markdown-source-view .cm-selectionBackground,
+.markdown-source-view .cm-selected {
+  background-color: var(--text-selection) !important;
+}
+
+/* Active line */
+.markdown-source-view .cm-activeLine {
+  background-color: var(--bg-hover);
+}
+
+.markdown-source-view .cm-activeLineGutter {
+  background-color: var(--bg-hover);
+}
+
+/* Gutter */
+.markdown-source-view .cm-gutters {
+  background-color: var(--background-primary);
+  border-right: 1px solid var(--border-color);
+  color: var(--text-faint);
+  font-family: var(--font-monospace);
+  font-size: 12px;
+}
+
+/* Callouts in source/live preview */
+.markdown-source-view .callout {
+  border-left: 3px solid var(--callout-info-text);
+}
+
+/* Tables in source/live preview — match body size (15px) so edit-mode
+   tables don't render larger than the surrounding prose. */
+.markdown-source-view .cm-table,
+.markdown-source-view .HyperMD-table,
+.markdown-source-view .HyperMD-table-row,
+.markdown-source-view .HyperMD-table-cell {
+  color: var(--text-normal);
+  font-size: 15px;
+}
+
+.markdown-source-view .cm-table-delimiter,
+.markdown-source-view .HyperMD-table-embed {
+  color: var(--text-muted);
+}
+
+/* Horizontal rule */
+.markdown-source-view .cm-hr {
+  color: var(--border-color);
+}
+
+/* Comments / HTML */
+.markdown-source-view .cm-comment {
+  color: var(--text-muted);
+}
+
+/* Mermaid / code blocks in source */
+.markdown-source-view .HyperMD-codeblock {
+  font-family: var(--font-monospace);
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text-normal);
+}
+
+.markdown-source-view .HyperMD-codeblock-begin,
+.markdown-source-view .HyperMD-codeblock-end {
+  color: var(--text-muted);
+}
+
+.markdown-source-view .HyperMD-codeblock-bg {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-hairline);
+}
+
+/* Lists */
+.markdown-source-view .cm-list {
+  color: var(--text-normal);
+}
+
+.markdown-source-view .cm-quote {
+  color: var(--text-muted);
+  /* No border here — the single bar is drawn by Obsidian's native
+     .cm-blockquote-border, now neutralized via --blockquote-border-color.
+     A border-left here would re-introduce the doubled line. */
+  border-left: none;
+}
+
+/* ============================================================
+    18. MOBILE / NARROW LAYOUT
+    ============================================================ */
+@media (max-width: 600px) {
+  body {
+    font-size: 13px;
+  }
+
+  .mod-root .workspace-tab-header {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .nav-file-title,
+  .nav-folder-title,
+  .tree-item-self {
+    padding: 6px 10px 6px 12px;
+  }
+
+  .markdown-rendered pre code {
+    padding: 12px 14px;
+    font-size: 12px;
+  }
+
+  .modal,
+  .prompt {
+    border-radius: 0;
+  }
+}
+
+/* Mobile side docks */
+.is-mobile .workspace-drawer {
+  background-color: var(--background-secondary);
+}
+
+.is-mobile .workspace-drawer-header {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.is-mobile .workspace-drawer-header-name {
+  color: var(--text-normal);
+  font-weight: 600;
+}
+
+.is-mobile .workspace-drawer-tab-option {
+  color: var(--text-muted);
+  border-radius: 0;
+}
+
+.is-mobile .workspace-drawer-tab-option.is-active {
+  color: var(--text-normal);
+  background-color: var(--bg-active);
+  border-bottom: 2px solid var(--text-normal);
+}
