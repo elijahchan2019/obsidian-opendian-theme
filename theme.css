@@ -71,8 +71,10 @@
   --border-color: var(--oc-border);
   --border-hover: var(--oc-border-muted);
   --border-hairline: rgba(255, 255, 255, 0.06);
+  --border-split: rgba(255, 255, 255, 0.035);
   --bg-active: rgba(255, 255, 255, 0.09);
   --bg-hover: rgba(255, 255, 255, 0.04);
+  --bg-nav-hover: rgba(255, 255, 255, 0.06);
   /* Active tab needs a noticeably darker fill than a hover/selected icon
      so the open file reads at a glance, without jumping to a flat white. */
   --bg-tab-active: rgba(255, 255, 255, 0.14);
@@ -221,8 +223,10 @@
   --border-color: var(--oc-border);
   --border-hover: var(--oc-border-muted);
   --border-hairline: rgba(0, 0, 0, 0.06);
+  --border-split: rgba(0, 0, 0, 0.035);
   --bg-active: rgba(0, 0, 0, 0.07);
   --bg-hover: rgba(0, 0, 0, 0.03);
+  --bg-nav-hover: rgba(0, 0, 0, 0.045);
   --bg-tab-active: rgba(0, 0, 0, 0.12);
 
   /* Callouts */
@@ -361,11 +365,13 @@ body {
 }
 
 .workspace-split.mod-left-split {
-  border-right: 1px solid var(--border-hairline);
+  border-right: 1px solid var(--border-split);
+  box-shadow: none;
 }
 .workspace-split.mod-right-split {
-  border-left: 1px solid var(--border-hairline);
+  border-left: 1px solid var(--border-split);
   border-right: none;
+  box-shadow: none;
 }
 
 /* Vault name / logo area — OpenCode dual-tone effect.
@@ -414,12 +420,19 @@ body {
 body:not(.is-mobile) .workspace-split.mod-left-split
   .workspace-sidedock-vault-profile {
   border-top: none !important;
+  align-items: center;
+  gap: 8px;
+  padding-inline: 18px 20px;
 }
 
 /* Rounded hover panel on the switcher (was square-cornered). */
 body:not(.is-mobile) .workspace-split.mod-left-split
   .workspace-sidedock-vault-profile .workspace-drawer-vault-switcher {
   border-radius: var(--oc-radius-control);
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding-inline: 0;
 }
 
 body:not(.is-mobile) .workspace-split.mod-left-split
@@ -431,6 +444,51 @@ body:not(.is-mobile) .workspace-split.mod-left-split
   .workspace-sidedock-vault-profile .workspace-drawer-vault-name {
   font-weight: 600;
   color: var(--text-normal);
+  line-height: 24px;
+  padding-bottom: 0;
+}
+
+body:not(.is-mobile) .workspace-sidedock-vault-profile .workspace-drawer-vault-actions,
+body:not(.is-mobile) .workspace-sidedock-vault-profile [aria-label*="Settings" i],
+body:not(.is-mobile) .workspace-sidedock-vault-profile [aria-label*="设置" i],
+body:not(.is-mobile) .workspace-sidedock-vault-profile .clickable-icon:has(svg.lucide-settings) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  min-height: 24px;
+}
+
+body:not(.is-mobile) .workspace-sidedock-vault-profile svg.lucide-settings,
+body:not(.is-mobile) .workspace-sidedock-vault-profile [aria-label*="Settings" i] svg,
+body:not(.is-mobile) .workspace-sidedock-vault-profile [aria-label*="设置" i] svg,
+body:not(.is-mobile) .workspace-sidedock-vault-profile .clickable-icon:has(svg.lucide-settings) svg {
+  display: none !important;
+}
+
+body:not(.is-mobile) .workspace-sidedock-vault-profile [aria-label*="Settings" i]::before,
+body:not(.is-mobile) .workspace-sidedock-vault-profile [aria-label*="设置" i]::before,
+body:not(.is-mobile) .workspace-sidedock-vault-profile .clickable-icon:has(svg.lucide-settings)::before {
+  content: '';
+  display: block;
+  width: 18px;
+  height: 18px;
+  background-color: var(--text-muted);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='white' fill-rule='evenodd' clip-rule='evenodd' d='M4 2h16v20H4V2Zm4 4v12h8V6H8Z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='white' fill-rule='evenodd' clip-rule='evenodd' d='M4 2h16v20H4V2Zm4 4v12h8V6H8Z'/%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  transform: translateY(-1px);
+}
+
+body:not(.is-mobile) .workspace-sidedock-vault-profile [aria-label*="Settings" i]:hover::before,
+body:not(.is-mobile) .workspace-sidedock-vault-profile [aria-label*="设置" i]:hover::before,
+body:not(.is-mobile) .workspace-sidedock-vault-profile .clickable-icon:has(svg.lucide-settings):hover::before {
+  background-color: var(--text-normal);
 }
 
 /* File explorer nav items */
@@ -438,13 +496,14 @@ body:not(.is-mobile) .workspace-split.mod-left-split
    paints their hover/active background ON .tree-item-self (app.css:9507-9517)
    using --nav-item-background-hover/active, with a rounded --nav-item-radius.
    Opendian ALSO paints a background on .nav-file-title.is-active for the
-   left-accent-rail style → two stacked backgrounds = the "double layer"
-   (rounded native fill behind our fill). Fix: neutralize the native fill so
-   only our single layer shows; the radius token stays so shapes match. */
+   left-accent-rail style → two stacked active backgrounds = the "double
+   layer" (rounded native fill behind our fill). Keep the native hover fill
+   visible, but neutralize native active/selected so active remains a single
+   custom left-rail layer. */
 .nav-file-title,
 .nav-folder-title {
   --nav-item-radius: var(--oc-radius-control);
-  --nav-item-background-hover: transparent;
+  --nav-item-background-hover: var(--bg-nav-hover);
   --nav-item-background-active: transparent;
   --nav-item-background-selected: transparent;
   padding: 5px 10px 5px 14px;
@@ -464,7 +523,7 @@ body:not(.is-mobile) .workspace-split.mod-left-split
 
 .nav-file-title:hover:not(.is-active),
 .nav-folder-title:hover {
-  background-color: var(--bg-hover);
+  background-color: var(--bg-nav-hover);
 }
 
 .nav-folder-title {
@@ -505,7 +564,13 @@ body:not(.is-mobile) .workspace-split.mod-left-split
    native padding restores their default relationship. */
 .workspace-ribbon {
   background-color: var(--background-secondary);
-  border-right: 1px solid var(--border-hairline);
+  border-right: 1px solid var(--border-split);
+  box-shadow: none;
+}
+
+.workspace-leaf-resize-handle {
+  border-color: var(--border-split) !important;
+  box-shadow: none !important;
 }
 /* NOTE on sidebar icon alignment (v1.10.9 root-cause fix):
    The 📁/🔍/🔖 icons in the left sidebar are NOT ribbon actions
@@ -593,7 +658,7 @@ svg[class*="help" i] { display: none !important; }
   display: none !important;
 }
 
-/* Custom settings icon (sliders) */
+/* Custom settings icon — OpenCode-style sharp O mark. */
 .workspace-ribbon .clickable-icon[aria-label*="Settings" i] svg,
 .workspace-ribbon .clickable-icon[aria-label*="设置" i] svg {
   display: none !important;
@@ -602,13 +667,17 @@ svg[class*="help" i] { display: none !important; }
 .workspace-ribbon .clickable-icon[aria-label*="设置" i]::before {
   content: '';
   display: block;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   background-color: var(--text-muted);
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 21v-7'/%3E%3Cpath d='M4 10V3'/%3E%3Cpath d='M12 21v-9'/%3E%3Cpath d='M12 8V3'/%3E%3Cpath d='M20 21v-5'/%3E%3Cpath d='M20 12V3'/%3E%3Cpath d='M1 14h6'/%3E%3Cpath d='M9 8h6'/%3E%3Cpath d='M17 16h6'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='white' fill-rule='evenodd' clip-rule='evenodd' d='M4 2h16v20H4V2Zm4 4v12h8V6H8Z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='white' fill-rule='evenodd' clip-rule='evenodd' d='M4 2h16v20H4V2Zm4 4v12h8V6H8Z'/%3E%3C/svg%3E");
   -webkit-mask-size: contain;
+  mask-size: contain;
   -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
   -webkit-mask-position: center;
+  mask-position: center;
 }
 .workspace-ribbon .clickable-icon[aria-label*="Settings" i]:hover::before,
 .workspace-ribbon .clickable-icon[aria-label*="设置" i]:hover::before {
@@ -640,7 +709,7 @@ svg[class*="help" i] { display: none !important; }
 /* Theming (colours / de-lining) is safe to apply to every tab bar. */
 .workspace-tab-header-container {
   --tab-curve: 0px;
-  --tab-divider-color: var(--border-hairline);
+  --tab-divider-color: var(--border-split);
   --tab-radius: var(--oc-radius-control);
   --tab-radius-active: var(--oc-radius-control);
   --tab-background-active: var(--background-primary);
@@ -664,6 +733,30 @@ svg[class*="help" i] { display: none !important; }
 .workspace-tab-header-container .workspace-tab-header::before,
 .workspace-tab-header-container .workspace-tab-header::after {
   display: none !important;
+}
+
+/* Sidebar tab icons (File Explorer / Search / Bookmarks) keep native sidebar
+   geometry for alignment, but their visible hover/active chip should use the
+   same rounded control shape as other icon buttons. */
+.workspace-split.mod-left-split .workspace-tab-header .workspace-tab-header-inner,
+.workspace-split.mod-right-split .workspace-tab-header .workspace-tab-header-inner {
+  border-radius: var(--oc-radius-control) !important;
+}
+.workspace-split.mod-left-split .workspace-tab-header,
+.workspace-split.mod-right-split .workspace-tab-header,
+.workspace-split.mod-left-split .workspace-tab-header:hover,
+.workspace-split.mod-right-split .workspace-tab-header:hover,
+.workspace-split.mod-left-split .workspace-tab-header.is-active,
+.workspace-split.mod-right-split .workspace-tab-header.is-active {
+  background-color: transparent !important;
+}
+.workspace-split.mod-left-split .workspace-tab-header:hover .workspace-tab-header-inner,
+.workspace-split.mod-right-split .workspace-tab-header:hover .workspace-tab-header-inner {
+  background-color: var(--bg-hover) !important;
+}
+.workspace-split.mod-left-split .workspace-tab-header.is-active .workspace-tab-header-inner,
+.workspace-split.mod-right-split .workspace-tab-header.is-active .workspace-tab-header-inner {
+  background-color: var(--bg-active) !important;
 }
 
 .mod-root .workspace-tab-header {
@@ -755,6 +848,14 @@ svg[class*="help" i] { display: none !important; }
    bar mark. Reads as a "fixed/anchored" glyph (like a cursor hold) and echoes
    the monospace/terminal language better than a dot. On hover the close (×)
    still works for unpinned tabs; pinned tabs show the bar at rest. */
+.workspace-split.mod-root .workspace-tab-header-inner-close-button.mod-pinned,
+.workspace-split.mod-root .workspace-tab-header-status-icon.mod-pinned {
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
 .workspace-split.mod-root .workspace-tab-header-inner-close-button.mod-pinned svg,
 .workspace-split.mod-root .workspace-tab-header-status-icon.mod-pinned svg {
   display: none !important;
@@ -762,10 +863,17 @@ svg[class*="help" i] { display: none !important; }
 .workspace-split.mod-root .workspace-tab-header-inner-close-button.mod-pinned::before,
 .workspace-split.mod-root .workspace-tab-header-status-icon.mod-pinned::before {
   content: '';
-  width: 10px;
-  height: 1.5px;
-  border-radius: 1px;
+  width: 13px;
+  height: 13px;
   background-color: var(--text-muted);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M8 3h8v3l-1.5 1.5V12l4.5 4.5V19h-6v3h-2v-3H5v-2.5L9.5 12V7.5L8 6V3Z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M8 3h8v3l-1.5 1.5V12l4.5 4.5V19h-6v3h-2v-3H5v-2.5L9.5 12V7.5L8 6V3Z'/%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
   flex-shrink: 0;
 }
 .workspace-split.mod-root .workspace-tab-header.is-active .workspace-tab-header-inner-close-button.mod-pinned::before,
@@ -1269,7 +1377,8 @@ a:hover { color: var(--text-accent-hover); text-decoration: underline; }
 /* Settings Sidebar separation */
 .vertical-tab-header {
   background-color: var(--background-secondary);
-  border-right: 1px solid var(--border-hairline);
+  border-right: 1px solid var(--border-split);
+  box-shadow: none;
 }
 .vertical-tab-content-container {
   background-color: var(--background-primary);
@@ -1650,7 +1759,7 @@ a.tag:hover, .tag:hover {
 }
 
 .tree-item-self:hover:not(.is-active) {
-  background-color: var(--bg-hover);
+  background-color: var(--bg-nav-hover);
 }
 
 .tree-item-self.is-active {
@@ -2061,14 +2170,27 @@ a.tag:hover, .tag:hover {
   border-left: 3px solid var(--callout-info-text);
 }
 
-/* Tables in source/live preview — match body size (15px) so edit-mode
-   tables don't render larger than the surrounding prose. */
+/* Tables in source/live preview — the rendered table editor is a
+   .cm-table-widget, not just token spans like .cm-table. Pin both layers to
+   the same 14px as normal editor lines so table text cannot jump larger than
+   surrounding prose. */
 .markdown-source-view .cm-table,
 .markdown-source-view .HyperMD-table,
 .markdown-source-view .HyperMD-table-row,
 .markdown-source-view .HyperMD-table-cell {
   color: var(--text-normal);
-  font-size: 15px;
+  font-size: 14px !important;
+}
+
+.markdown-source-view.mod-cm6 .cm-table-widget,
+.markdown-source-view.mod-cm6 .cm-table-widget table,
+.markdown-source-view.mod-cm6 .cm-table-widget th,
+.markdown-source-view.mod-cm6 .cm-table-widget td,
+.markdown-source-view.mod-cm6 .cm-table-widget .table-cell-wrapper,
+.markdown-source-view.mod-cm6 .cm-table-widget .cm-line,
+.markdown-source-view.mod-cm6 .cm-table-widget-row .cm-table-widget-cell {
+  font-size: 14px !important;
+  line-height: 1.65;
 }
 
 .markdown-source-view .cm-table-delimiter,

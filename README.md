@@ -1,5 +1,7 @@
 # Opendian
 
+![Opendian preview](screenshot.png)
+
 > **A developer-documentation theme for Obsidian.** Monospace typography, a layered radius system, and minimal chrome — inspired by the [OpenCode](https://opencode.ai) visual language. Makes your vault feel like a professional code editor, not a note-taking app.
 
 [中文介绍](https://github.com/elijahchan2019/obsidian-opendian-theme/blob/main/README.zh-CN.md) · Light &amp; Dark · Desktop &amp; Mobile · No plugin required
@@ -65,7 +67,7 @@ Opendian covers every surface that shapes the developer writing experience:
 - **Tables** — minimalist 1px horizontal hairline rows, zero radius, compact density
 - **Blockquotes** — single neutral bar, no accent color bleed
 - **Headings** — monospace, no decorative underlines, edit-reading size parity
-- **Tabs** — immersive bar with a flat active chip, hairline dividers, and a pinned-tab bar indicator
+- **Tabs** — immersive bar with a flat active chip, hairline dividers, and a geometric pinned-tab marker
 - **Sidebar** — black accent bar on active file, auto-collapsing top toolbar
 - **Vault wordmark** — dual-tone text treatment without a hard-coded avatar box
 - **Buttons** — solid black/white primary CTA, outline secondary, 6px radius
