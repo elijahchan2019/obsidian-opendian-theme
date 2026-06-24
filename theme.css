@@ -2170,6 +2170,41 @@ a.tag:hover, .tag:hover {
   border-left: 3px solid var(--callout-info-text);
 }
 
+.markdown-source-view .callout[data-callout="abstract"],
+.markdown-source-view .callout[data-callout="summary"],
+.markdown-source-view .callout[data-callout="question"],
+.markdown-source-view .callout[data-callout="quote"],
+.markdown-source-view .callout[data-callout="example"],
+.markdown-source-view .callout[data-callout="note"],
+.markdown-source-view .callout[data-callout="info"] {
+  border-left-color: var(--callout-info-text);
+}
+
+.markdown-source-view .callout[data-callout="tip"] {
+  border-left-color: #af52de;
+}
+
+.markdown-source-view .callout[data-callout="success"],
+.markdown-source-view .callout[data-callout="check"],
+.markdown-source-view .callout[data-callout="done"] {
+  border-left-color: var(--callout-success-text);
+}
+
+.markdown-source-view .callout[data-callout="warning"],
+.markdown-source-view .callout[data-callout="caution"],
+.markdown-source-view .callout[data-callout="attention"] {
+  border-left-color: var(--callout-warning-text);
+}
+
+.markdown-source-view .callout[data-callout="danger"],
+.markdown-source-view .callout[data-callout="error"],
+.markdown-source-view .callout[data-callout="bug"],
+.markdown-source-view .callout[data-callout="failure"],
+.markdown-source-view .callout[data-callout="fail"],
+.markdown-source-view .callout[data-callout="missing"] {
+  border-left-color: var(--callout-error-text);
+}
+
 /* Tables in source/live preview — the rendered table editor is a
    .cm-table-widget, not just token spans like .cm-table. Pin both layers to
    the same 14px as normal editor lines so table text cannot jump larger than
