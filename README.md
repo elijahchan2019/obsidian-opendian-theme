@@ -23,10 +23,10 @@ You can also download it from the official [IBM Plex repository](https://github.
 - **Monospace-first typography** — IBM Plex Mono → Berkeley Mono → JetBrains Mono across headings, body, and UI. Your vault reads like terminal output and technical documentation.
 - **Layered radius system** — content stays sharp (0px for code blocks, tables, callouts), controls are soft (4–8px for buttons, inputs, tabs), modals are softer (12px). One coherent principle instead of random roundness.
 - **Minimal-lines chrome** — hard 1px borders are replaced by background-step separation. The tab bar, titlebar, and view header blend into one immersive surface.
-- **OpenCode color system** — precise tokens derived from the OpenCode website and desktop client. `#007AFF` accent, monochrome primary actions, semantic callout colors.
+- **OpenCode color system** — precise tokens derived from the OpenCode website and desktop client. Monochrome links and primary actions, with blue reserved for selection and semantic accents.
 - **Flat active tab** — inactive tabs are plain text with hairline dividers; the active tab is a quiet tinted chip that stays aligned with the native side docks.
 - **Terminal-grade code blocks** — softly-filled surface with language labels. No fake macOS window dots, no copy-button chrome, no drop shadows.
-- **Semantic callouts** — left accent bar + tinted background, matching OpenCode's documentation aside style. Distinct palettes for info, warning, success, and danger.
+- **Semantic callouts** — a low-tint technical surface with a slim semantic rail and colored title/icon, keeping the page calmer than traditional Obsidian callout blocks.
 - **IDE-style sidebar** — black accent bar on the active file, auto-collapsing top toolbar (Folio-style), and a dual-tone vault wordmark.
 
 ## Design
@@ -41,7 +41,7 @@ Opendian is built on the OpenCode color system — a precise, monochrome-forward
 | Surface | `#F5F5F7` | Sidebar, inactive tabs, secondary areas |
 | Border | `#D2D2D7` | Dividers, 1px lines |
 | Text Main | `#1D1D1F` | Body text and headings |
-| Accent | `#007AFF` | Links |
+| Accent | `#007AFF` | Selection and semantic accents |
 
 **Dark mode (Terminal Style):**
 
@@ -51,7 +51,7 @@ Opendian is built on the OpenCode color system — a precise, monochrome-forward
 | Surface | `#161618` | Sidebar, inactive tabs |
 | Border | `#38383A` | Dividers |
 | Text Main | `#FFFFFF` | Body text |
-| Accent | `#007AFF` | Links |
+| Accent | `#007AFF` | Selection and semantic accents |
 
 Typography uses a monospace-first stack with CJK fallbacks:
 
@@ -74,18 +74,49 @@ Typography uses a monospace-first stack with CJK fallbacks:
 Opendian covers every surface that shapes the developer writing experience:
 
 - **Code blocks** — softly-filled surface with language-label header; no decorative dots, copy-button chrome, or shadows
-- **Inline code** — borderless tint + accent-colored text
-- **Callouts** — left 3px accent bar + 8–10% opacity tinted background, matching OpenCode docs
+- **Inline code** — borderless neutral tint + monochrome text
+- **Callouts** — slim semantic rail + low-tint surface, with color concentrated on title/icon
 - **Tables** — minimalist 1px horizontal hairline rows, zero radius, compact density
-- **Blockquotes** — single neutral bar, no accent color bleed
+- **Blockquotes** — double neutral rail, no accent color bleed
 - **Headings** — monospace, no decorative underlines, edit-reading size parity
 - **Tabs** — immersive bar with a flat active chip, hairline dividers, and a geometric pinned-tab marker
 - **Sidebar** — black accent bar on active file, auto-collapsing top toolbar
 - **Vault wordmark** — dual-tone text treatment without a hard-coded avatar box
 - **Buttons** — solid black/white primary CTA, outline secondary, 6px radius
 - **Toggles** — rounded rectangle (5px track, 3px knob), not a pill
-- **Checkboxes** — monochrome fill, no strikethrough on done tasks (fade only)
+- **Checkboxes** — monochrome custom task states, no strikethrough on done tasks (fade only)
 - **Dropdowns** — borderless with `field-sizing: content` for value-width sizing
+
+## Supported Checkbox States
+
+Opendian supports Obsidian's native task syntax plus the common Minimal-style extended markers, redrawn as a black/white/gray icon set. No plugin is required; use ASCII brackets:
+
+```md
+- [ ] todo
+- [/] incomplete
+- [x] done
+- [X] done
+- [-] canceled
+- [>] forwarded
+- [<] scheduled
+- [?] question
+- [!] important
+- ["] quote
+- [“] quote
+- [*] star
+- [i] info
+- [I] idea
+- [b] bookmark
+- [l] location
+- [S] savings
+- [p] pros
+- [c] cons
+- [f] fire
+- [k] key
+- [u] up
+- [d] down
+- [w] win
+```
 
 ## Installation
 

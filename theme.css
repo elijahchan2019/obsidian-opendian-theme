@@ -54,6 +54,17 @@
   --text-faint: var(--oc-text-disabled);
   --text-accent: var(--oc-accent);
   --text-accent-hover: var(--oc-accent-hover);
+  --link-color: var(--text-normal);
+  --link-color-hover: var(--text-normal);
+  --link-decoration-color: rgba(255, 255, 255, 0.28);
+  --link-decoration-color-hover: rgba(255, 255, 255, 0.55);
+  --link-decoration: underline;
+  --link-decoration-hover: underline;
+  --link-external-decoration: underline;
+  --link-external-decoration-hover: underline;
+  --link-external-color: var(--link-color);
+  --link-external-color-hover: var(--link-color-hover);
+  --link-unresolved-color: var(--text-muted);
   --text-error: var(--oc-danger);
   --text-success: var(--oc-success);
   --text-selection: rgba(0, 122, 255, 0.25);
@@ -81,15 +92,18 @@
      so the open file reads at a glance, without jumping to a flat white. */
   --bg-tab-active: rgba(255, 255, 255, 0.14);
 
-  /* Callouts (Starlight aside mapping) */
-  --callout-info-bg: rgba(0, 122, 255, 0.10);
-  --callout-info-text: #4aa2ff;
-  --callout-success-bg: rgba(48, 209, 88, 0.10);
-  --callout-success-text: #4cd964;
-  --callout-warning-bg: rgba(255, 159, 10, 0.10);
-  --callout-warning-text: #ffb340;
-  --callout-error-bg: rgba(255, 69, 58, 0.10);
-  --callout-error-text: #ff6961;
+  /* Callouts: neutral technical surface, semantic color on rail/title/icon. */
+  --callout-surface: rgba(255, 255, 255, 0.026);
+  --callout-info-bg: var(--callout-surface);
+  --callout-info-text: #8ab4df;
+  --callout-success-bg: var(--callout-surface);
+  --callout-success-text: #80c990;
+  --callout-warning-bg: var(--callout-surface);
+  --callout-warning-text: #d8a04b;
+  --callout-error-bg: var(--callout-surface);
+  --callout-error-text: #e7827a;
+  --callout-tip-bg: var(--callout-surface);
+  --callout-tip-text: #b48ad6;
 
   /* UI chrome */
   --sidebar-pill-bg: rgba(255, 255, 255, 0.08);
@@ -217,6 +231,17 @@
   --text-faint: var(--oc-text-disabled);
   --text-accent: var(--oc-accent);
   --text-accent-hover: var(--oc-accent-hover);
+  --link-color: var(--text-normal);
+  --link-color-hover: var(--text-normal);
+  --link-decoration-color: rgba(0, 0, 0, 0.22);
+  --link-decoration-color-hover: rgba(0, 0, 0, 0.46);
+  --link-decoration: underline;
+  --link-decoration-hover: underline;
+  --link-external-decoration: underline;
+  --link-external-decoration-hover: underline;
+  --link-external-color: var(--link-color);
+  --link-external-color-hover: var(--link-color-hover);
+  --link-unresolved-color: var(--text-muted);
   --text-error: var(--oc-danger);
   --text-success: var(--oc-success);
   --text-selection: rgba(0, 122, 255, 0.20);
@@ -243,14 +268,17 @@
   --bg-tab-active: rgba(0, 0, 0, 0.12);
 
   /* Callouts */
-  --callout-info-bg: rgba(0, 122, 255, 0.08);
-  --callout-info-text: #0066d4;
-  --callout-success-bg: rgba(48, 209, 88, 0.08);
-  --callout-success-text: #248a3d;
-  --callout-warning-bg: rgba(255, 159, 10, 0.08);
-  --callout-warning-text: #c77f00;
-  --callout-error-bg: rgba(255, 59, 48, 0.08);
-  --callout-error-text: #d70015;
+  --callout-surface: rgba(0, 0, 0, 0.018);
+  --callout-info-bg: var(--callout-surface);
+  --callout-info-text: #315f8f;
+  --callout-success-bg: var(--callout-surface);
+  --callout-success-text: #3b7f52;
+  --callout-warning-bg: var(--callout-surface);
+  --callout-warning-text: #8a6a20;
+  --callout-error-bg: var(--callout-surface);
+  --callout-error-text: #9c3f38;
+  --callout-tip-bg: var(--callout-surface);
+  --callout-tip-text: #6f4a8e;
 
   /* UI chrome */
   --sidebar-pill-bg: #ffffff;
@@ -554,18 +582,16 @@ body:not(.is-mobile) .workspace-sidedock-vault-profile .clickable-icon:has(svg.l
   --nav-item-background-hover: var(--bg-nav-hover);
   --nav-item-background-active: transparent;
   --nav-item-background-selected: transparent;
-  padding: 5px 10px 5px 14px;
   margin: 1px 0;
   color: var(--text-normal);
   letter-spacing: var(--sidebar-text-tracking);
   transition: background-color 0.12s ease, color 0.12s ease;
-  border-left: 2px solid transparent;
 }
 
 .nav-file-title.is-active {
   background-color: var(--bg-active);
   border: none;
-  border-left: 2px solid var(--text-normal);
+  box-shadow: inset 2px 0 0 var(--text-normal);
   font-weight: 600;
   color: var(--text-normal);
 }
@@ -599,7 +625,7 @@ body:not(.is-mobile) .workspace-sidedock-vault-profile .clickable-icon:has(svg.l
 
 .workspace-split.mod-right-split .nav-file-title.is-active,
 .workspace-split.mod-right-split .tree-item-self.is-active {
-  border-left: 2px solid var(--text-normal);
+  box-shadow: inset 2px 0 0 var(--text-normal);
   color: var(--text-normal);
 }
 
@@ -973,8 +999,18 @@ svg[class*="help" i] { display: none !important; }
 .HyperMD-header-6, .markdown-rendered h6 { font-size: 0.95em !important; font-weight: 600; color: var(--text-muted); }
 
 strong, b { font-weight: 700; color: var(--text-normal); }
-a { color: var(--text-accent); text-decoration: none; transition: color 0.12s ease; }
-a:hover { color: var(--text-accent-hover); text-decoration: underline; }
+a {
+  color: var(--link-color);
+  text-decoration-line: underline;
+  text-decoration-color: var(--link-decoration-color);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  transition: color 0.12s ease, text-decoration-color 0.12s ease;
+}
+a:hover {
+  color: var(--link-color-hover);
+  text-decoration-color: var(--link-decoration-color-hover);
+}
 
 .markdown-rendered hr {
   border: none;
@@ -1066,7 +1102,7 @@ a:hover { color: var(--text-accent-hover); text-decoration: underline; }
   font-family: var(--font-monospace);
   font-size: 0.88em;
   font-weight: 600;
-  color: var(--text-accent);
+  color: var(--text-normal);
   background-color: transparent;
   padding: 0;
   border: none;
@@ -1089,7 +1125,7 @@ a:hover { color: var(--text-accent-hover); text-decoration: underline; }
 .callout {
   background-color: var(--callout-info-bg);
   border: none;
-  border-left: 3px solid var(--callout-info-text);
+  border-left: 2px solid var(--callout-info-text);
   border-radius: 0;
   padding: 12px 16px;
   margin: 1.2em 0;
@@ -1151,8 +1187,8 @@ a:hover { color: var(--text-accent-hover); text-decoration: underline; }
 }
 
 .callout-content a {
-  color: var(--callout-info-text);
-  text-decoration: underline;
+  color: var(--link-color);
+  text-decoration-color: var(--link-decoration-color);
 }
 
 .callout-content code {
@@ -1213,18 +1249,14 @@ a:hover { color: var(--text-accent-hover); text-decoration: underline; }
 
 /* Tip -> purple */
 .callout[data-callout="tip"] {
-  background-color: rgba(175, 82, 222, 0.10);
-  border-left-color: #af52de;
+  background-color: var(--callout-tip-bg);
+  border-left-color: var(--callout-tip-text);
 }
 
 .callout[data-callout="tip"] .callout-title,
 .callout[data-callout="tip"] .callout-title-inner,
 .callout[data-callout="tip"] .callout-icon {
-  color: #af52de;
-}
-
-.theme-light .callout[data-callout="tip"] {
-  background-color: rgba(175, 82, 222, 0.08);
+  color: var(--callout-tip-text);
 }
 
 /* Success -> green */
@@ -1281,12 +1313,21 @@ a:hover { color: var(--text-accent-hover); text-decoration: underline; }
 .callout[data-callout="danger"] .callout-title,
 .callout[data-callout="error"] .callout-title,
 .callout[data-callout="bug"] .callout-title,
+.callout[data-callout="failure"] .callout-title,
+.callout[data-callout="fail"] .callout-title,
+.callout[data-callout="missing"] .callout-title,
 .callout[data-callout="danger"] .callout-title-inner,
 .callout[data-callout="error"] .callout-title-inner,
 .callout[data-callout="bug"] .callout-title-inner,
+.callout[data-callout="failure"] .callout-title-inner,
+.callout[data-callout="fail"] .callout-title-inner,
+.callout[data-callout="missing"] .callout-title-inner,
 .callout[data-callout="danger"] .callout-icon,
 .callout[data-callout="error"] .callout-icon,
-.callout[data-callout="bug"] .callout-icon {
+.callout[data-callout="bug"] .callout-icon,
+.callout[data-callout="failure"] .callout-icon,
+.callout[data-callout="fail"] .callout-icon,
+.callout[data-callout="missing"] .callout-icon {
   color: var(--callout-error-text);
 }
 
@@ -1321,7 +1362,7 @@ a:hover { color: var(--text-accent-hover); text-decoration: underline; }
   font-family: var(--font-monospace);
   font-size: 0.85em;
   font-weight: 600;
-  color: var(--text-accent);
+  color: var(--text-normal);
   background-color: var(--bg-secondary);
   border: none;
   padding: 2px 6px;
@@ -1334,6 +1375,7 @@ a:hover { color: var(--text-accent-hover); text-decoration: underline; }
    map common languages explicitly; unknown ones fall back to a
    generic glyph so we never print "language-xxx" verbatim. */
 .markdown-rendered pre:has(> code[class*="language-"])::before {
+  content: 'Code';
   display: block;
   padding: 6px 18px;
   font-size: 11px;
@@ -1348,28 +1390,17 @@ a:hover { color: var(--text-accent-hover); text-decoration: underline; }
 
 .markdown-rendered pre > code[class*="language-"]::before { display: none !important; }
 
-.markdown-rendered pre:has(> code.language-js)::before,
-.markdown-rendered pre:has(> code.language-javascript)::before { content: 'JavaScript'; }
-.markdown-rendered pre:has(> code.language-ts)::before,
-.markdown-rendered pre:has(> code.language-typescript)::before { content: 'TypeScript'; }
-.markdown-rendered pre:has(> code.language-py)::before,
-.markdown-rendered pre:has(> code.language-python)::before { content: 'Python'; }
-.markdown-rendered pre:has(> code.language-css)::before { content: 'CSS'; }
-.markdown-rendered pre:has(> code.language-scss)::before,
-.markdown-rendered pre:has(> code.language-less)::before { content: 'CSS'; }
+.markdown-rendered pre:has(> code:is(.language-js, .language-javascript))::before { content: 'JavaScript'; }
+.markdown-rendered pre:has(> code:is(.language-ts, .language-typescript))::before { content: 'TypeScript'; }
+.markdown-rendered pre:has(> code:is(.language-py, .language-python))::before { content: 'Python'; }
+.markdown-rendered pre:has(> code:is(.language-css, .language-scss, .language-less))::before { content: 'CSS'; }
 .markdown-rendered pre:has(> code.language-html)::before { content: 'HTML'; }
 .markdown-rendered pre:has(> code.language-json)::before { content: 'JSON'; }
-.markdown-rendered pre:has(> code.language-yaml)::before,
-.markdown-rendered pre:has(> code.language-yml)::before { content: 'YAML'; }
-.markdown-rendered pre:has(> code.language-md)::before,
-.markdown-rendered pre:has(> code.language-markdown)::before { content: 'Markdown'; }
-.markdown-rendered pre:has(> code.language-bash)::before,
-.markdown-rendered pre:has(> code.language-shell)::before,
-.markdown-rendered pre:has(> code.language-sh)::before,
-.markdown-rendered pre:has(> code.language-zsh)::before { content: 'Shell'; }
+.markdown-rendered pre:has(> code:is(.language-yaml, .language-yml))::before { content: 'YAML'; }
+.markdown-rendered pre:has(> code:is(.language-md, .language-markdown))::before { content: 'Markdown'; }
+.markdown-rendered pre:has(> code:is(.language-bash, .language-shell, .language-sh, .language-zsh))::before { content: 'Shell'; }
 .markdown-rendered pre:has(> code.language-go)::before { content: 'Go'; }
-.markdown-rendered pre:has(> code.language-rust)::before,
-.markdown-rendered pre:has(> code.language-rs)::before { content: 'Rust'; }
+.markdown-rendered pre:has(> code:is(.language-rust, .language-rs))::before { content: 'Rust'; }
 .markdown-rendered pre:has(> code.language-java)::before { content: 'Java'; }
 .markdown-rendered pre:has(> code.language-c)::before { content: 'C'; }
 .markdown-rendered pre:has(> code.language-cpp)::before { content: 'C++'; }
@@ -1379,13 +1410,11 @@ a:hover { color: var(--text-accent-hover); text-decoration: underline; }
 .markdown-rendered pre:has(> code.language-dockerfile)::before { content: 'Dockerfile'; }
 .markdown-rendered pre:has(> code.language-xml)::before { content: 'XML'; }
 .markdown-rendered pre:has(> code.language-r)::before { content: 'R'; }
-.markdown-rendered pre:has(> code.language-ruby)::before,
-.markdown-rendered pre:has(> code.language-rb)::before { content: 'Ruby'; }
+.markdown-rendered pre:has(> code:is(.language-ruby, .language-rb))::before { content: 'Ruby'; }
 .markdown-rendered pre:has(> code.language-php)::before { content: 'PHP'; }
 .markdown-rendered pre:has(> code.language-swift)::before { content: 'Swift'; }
 .markdown-rendered pre:has(> code.language-kotlin)::before { content: 'Kotlin'; }
-.markdown-rendered pre:has(> code.language-text)::before,
-.markdown-rendered pre:has(> code.language-plaintext)::before { content: 'Text'; }
+.markdown-rendered pre:has(> code:is(.language-text, .language-plaintext))::before { content: 'Text'; }
 
 /* Copy code button */
 /* Code block copy button — disabled by design choice. Obsidian natively
@@ -1413,11 +1442,173 @@ a:hover { color: var(--text-accent-hover); text-decoration: underline; }
 /* ============================================================
    8. CHECKBOXES & LISTS
    ============================================================ */
-/* Checkboxes are fully variable-driven (see the token blocks:
-   --checkbox-color / --checkbox-marker-color / --checkbox-radius). Obsidian
-   renders the crisp centered SVG tick itself; done-task fade + no
-   strikethrough come from --checklist-done-color / -decoration. Nothing to
-   override here. */
+/* Normal [ ] / [x] checkboxes stay variable-driven. Alternate task states
+   follow Minimal's marker vocabulary, but redraw the symbols in Opendian's
+   monochrome technical language: outline, fill, and muted geometry only. */
+input:is([data-task="/"], [data-task="-"], [data-task="!"], [data-task="?"], [data-task='"'], [data-task="“"], [data-task="*"], [data-task="<"], [data-task=">"], [data-task="b"], [data-task="c"], [data-task="d"], [data-task="f"], [data-task="i"], [data-task="I"], [data-task="k"], [data-task="l"], [data-task="p"], [data-task="S"], [data-task="u"], [data-task="w"]):checked,
+li:is([data-task="/"], [data-task="-"], [data-task="!"], [data-task="?"], [data-task='"'], [data-task="“"], [data-task="*"], [data-task="<"], [data-task=">"], [data-task="b"], [data-task="c"], [data-task="d"], [data-task="f"], [data-task="i"], [data-task="I"], [data-task="k"], [data-task="l"], [data-task="p"], [data-task="S"], [data-task="u"], [data-task="w"]) > input:checked,
+li:is([data-task="/"], [data-task="-"], [data-task="!"], [data-task="?"], [data-task='"'], [data-task="“"], [data-task="*"], [data-task="<"], [data-task=">"], [data-task="b"], [data-task="c"], [data-task="d"], [data-task="f"], [data-task="i"], [data-task="I"], [data-task="k"], [data-task="l"], [data-task="p"], [data-task="S"], [data-task="u"], [data-task="w"]) > p > input:checked {
+  --checkbox-marker-color: transparent;
+  color: var(--text-muted);
+  background-color: currentColor !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  border-radius: 0;
+  -webkit-mask-image: var(--oc-task-icon);
+  mask-image: var(--oc-task-icon);
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+input:is([data-task="/"], [data-task="-"], [data-task="!"], [data-task="?"], [data-task='"'], [data-task="“"], [data-task="*"], [data-task="<"], [data-task=">"], [data-task="b"], [data-task="c"], [data-task="d"], [data-task="f"], [data-task="i"], [data-task="I"], [data-task="k"], [data-task="l"], [data-task="p"], [data-task="S"], [data-task="u"], [data-task="w"]):checked::after,
+li:is([data-task="/"], [data-task="-"], [data-task="!"], [data-task="?"], [data-task='"'], [data-task="“"], [data-task="*"], [data-task="<"], [data-task=">"], [data-task="b"], [data-task="c"], [data-task="d"], [data-task="f"], [data-task="i"], [data-task="I"], [data-task="k"], [data-task="l"], [data-task="p"], [data-task="S"], [data-task="u"], [data-task="w"]) > input:checked::after,
+li:is([data-task="/"], [data-task="-"], [data-task="!"], [data-task="?"], [data-task='"'], [data-task="“"], [data-task="*"], [data-task="<"], [data-task=">"], [data-task="b"], [data-task="c"], [data-task="d"], [data-task="f"], [data-task="i"], [data-task="I"], [data-task="k"], [data-task="l"], [data-task="p"], [data-task="S"], [data-task="u"], [data-task="w"]) > p > input:checked::after {
+  display: none;
+}
+
+input[data-task="/"]:checked,
+li[data-task="/"] > input:checked,
+li[data-task="/"] > p > input:checked {
+  --oc-task-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Crect%20x%3D%221.1%22%20y%3D%221.1%22%20width%3D%2213.8%22%20height%3D%2213.8%22%20rx%3D%222.4%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%2F%3E%3Cpath%20d%3D%22M12.6%203.3%203.4%2012.7%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.9%22%20stroke-linecap%3D%22square%22%2F%3E%3C%2Fsvg%3E");
+}
+
+input[data-task="-"]:checked,
+li[data-task="-"] > input:checked,
+li[data-task="-"] > p > input:checked {
+  --oc-task-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Crect%20x%3D%221.1%22%20y%3D%221.1%22%20width%3D%2213.8%22%20height%3D%2213.8%22%20rx%3D%222.4%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%2F%3E%3Cpath%20d%3D%22M3.8%208h8.4%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.9%22%20stroke-linecap%3D%22square%22%2F%3E%3C%2Fsvg%3E");
+  color: var(--text-faint);
+}
+
+.markdown-rendered li[data-task="-"].task-list-item,
+.markdown-source-view.mod-cm6 .HyperMD-task-line[data-task="-"] {
+  color: var(--text-faint);
+  text-decoration: line-through solid var(--text-faint) 1px;
+}
+
+input[data-task=">"]:checked,
+li[data-task=">"] > input:checked,
+li[data-task=">"] > p > input:checked {
+  --oc-task-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M3.5%208h8%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22square%22%2F%3E%3Cpath%20d%3D%22m8.5%204.5%203.5%203.5-3.5%203.5%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22square%22%20stroke-linejoin%3D%22miter%22%2F%3E%3C%2Fsvg%3E");
+}
+
+input[data-task="<"]:checked,
+li[data-task="<"] > input:checked,
+li[data-task="<"] > p > input:checked {
+  --oc-task-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Crect%20x%3D%223%22%20y%3D%224%22%20width%3D%2210%22%20height%3D%229%22%20rx%3D%221.5%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.4%22%2F%3E%3Cpath%20d%3D%22M5%202.8v3M11%202.8v3M3.5%207h9%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.2%22%20stroke-linecap%3D%22square%22%2F%3E%3C%2Fsvg%3E");
+}
+
+input[data-task="?"]:checked,
+li[data-task="?"] > input:checked,
+li[data-task="?"] > p > input:checked {
+  --oc-task-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M5.1%205.5c.15-2%201.55-3.3%203.45-3.3%202.05%200%203.45%201.25%203.45%203.05%200%201.55-.95%202.35-2.2%203.05-1%20.56-1.35%201-1.35%202.2%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22square%22%20stroke-linejoin%3D%22miter%22%2F%3E%3Ccircle%20cx%3D%228.45%22%20cy%3D%2213.1%22%20r%3D%221.15%22%20fill%3D%22black%22%2F%3E%3C%2Fsvg%3E");
+  color: var(--text-normal);
+}
+
+input[data-task="!"]:checked,
+li[data-task="!"] > input:checked,
+li[data-task="!"] > p > input:checked {
+  --oc-task-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M7.05%202.1h1.9l-.28%208.1H7.33L7.05%202.1Z%22%20fill%3D%22black%22%2F%3E%3Ccircle%20cx%3D%228%22%20cy%3D%2213%22%20r%3D%221.2%22%20fill%3D%22black%22%2F%3E%3C%2Fsvg%3E");
+  color: var(--text-normal);
+}
+
+input[data-task="*"]:checked,
+li[data-task="*"] > input:checked,
+li[data-task="*"] > p > input:checked {
+  --oc-task-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22m8%201.8%201.7%204.1%204.4.3-3.3%202.9%201%204.3L8%2011.1l-3.8%202.3%201-4.3-3.3-2.9%204.4-.3L8%201.8Z%22%20fill%3D%22black%22%2F%3E%3C%2Fsvg%3E");
+  color: var(--text-normal);
+}
+
+input[data-task='"']:checked,
+input[data-task="“"]:checked,
+li[data-task='"'] > input:checked,
+li[data-task="“"] > input:checked,
+li[data-task='"'] > p > input:checked,
+li[data-task="“"] > p > input:checked {
+  --oc-task-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M4.5%205.1h3v3.1c0%202.2-1%203.5-3%204.2v-1.6c.9-.4%201.3-1%201.4-1.9H4.5V5.1Zm5.1%200h3v3.1c0%202.2-1%203.5-3%204.2v-1.6c.9-.4%201.3-1%201.4-1.9H9.6V5.1Z%22%20fill%3D%22black%22%2F%3E%3C%2Fsvg%3E");
+}
+
+input[data-task="l"]:checked,
+li[data-task="l"] > input:checked,
+li[data-task="l"] > p > input:checked {
+  --oc-task-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M8%2014s4-4.4%204-7.3a4%204%200%200%200-8%200C4%209.6%208%2014%208%2014Z%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.5%22%2F%3E%3Ccircle%20cx%3D%228%22%20cy%3D%226.7%22%20r%3D%221.45%22%20fill%3D%22black%22%2F%3E%3C%2Fsvg%3E");
+}
+
+input[data-task="b"]:checked,
+li[data-task="b"] > input:checked,
+li[data-task="b"] > p > input:checked {
+  --oc-task-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M4.5%202.5h7v11L8%2011.4l-3.5%202.1v-11Z%22%20fill%3D%22black%22%2F%3E%3C%2Fsvg%3E");
+  color: var(--text-normal);
+}
+
+input[data-task="i"]:checked,
+li[data-task="i"] > input:checked,
+li[data-task="i"] > p > input:checked {
+  --oc-task-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Ccircle%20cx%3D%228%22%20cy%3D%228%22%20r%3D%225.5%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.4%22%2F%3E%3Ccircle%20cx%3D%228%22%20cy%3D%225.3%22%20r%3D%220.9%22%20fill%3D%22black%22%2F%3E%3Cpath%20d%3D%22M8%207.2v4%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22square%22%2F%3E%3C%2Fsvg%3E");
+}
+
+input[data-task="S"]:checked,
+li[data-task="S"] > input:checked,
+li[data-task="S"] > p > input:checked {
+  --oc-task-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Ccircle%20cx%3D%228%22%20cy%3D%228%22%20r%3D%225.4%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.3%22%2F%3E%3Cpath%20d%3D%22M8%203.9v8.2M10.4%205.3C9.8%204.8%209%204.5%208.1%204.5c-1.3%200-2.3.6-2.3%201.7%200%201.2%201.2%201.5%202.4%201.8%201.2.3%202.3.6%202.3%201.8s-1.1%201.8-2.5%201.8c-1%200-1.9-.3-2.6-1%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.25%22%20stroke-linecap%3D%22square%22%20stroke-linejoin%3D%22miter%22%2F%3E%3C%2Fsvg%3E");
+}
+
+input[data-task="I"]:checked,
+li[data-task="I"] > input:checked,
+li[data-task="I"] > p > input:checked {
+  --oc-task-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M5.2%207a2.8%202.8%200%201%201%205.6%200c0%201-.45%201.45-1.05%202.05-.4.4-.65.78-.65%201.35H6.9c0-.57-.25-.95-.65-1.35C5.65%208.45%205.2%208%205.2%207Z%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.5%22%20stroke-linejoin%3D%22round%22%2F%3E%3Cpath%20d%3D%22M6.65%2012h2.7M7.2%2014h1.6%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22square%22%2F%3E%3C%2Fsvg%3E");
+  color: var(--text-normal);
+}
+
+input[data-task="f"]:checked,
+li[data-task="f"] > input:checked,
+li[data-task="f"] > p > input:checked {
+  --oc-task-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M8.4%201.8c.3%202.3%202.8%203.2%202.8%206.2a3.9%203.9%200%200%201-7.8%200c0-2%201.2-3.4%202.4-4.4-.1%201.8.8%202.7%201.5%203.2.4-1.3.2-3.3%201.1-5Z%22%20fill%3D%22black%22%2F%3E%3C%2Fsvg%3E");
+  color: var(--text-normal);
+}
+
+input[data-task="k"]:checked,
+li[data-task="k"] > input:checked,
+li[data-task="k"] > p > input:checked {
+  --oc-task-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Ccircle%20cx%3D%225.8%22%20cy%3D%226.3%22%20r%3D%222.6%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.5%22%2F%3E%3Cpath%20d%3D%22m7.7%208.2%205%205M10.2%2010.7l1.5-1.5M11.7%2012.2l1.3-1.3%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22square%22%2F%3E%3C%2Fsvg%3E");
+}
+
+input[data-task="u"]:checked,
+li[data-task="u"] > input:checked,
+li[data-task="u"] > p > input:checked {
+  --oc-task-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M3%2011.5%206.5%208l2.2%202.2L13%205.9%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.65%22%20stroke-linecap%3D%22square%22%20stroke-linejoin%3D%22miter%22%2F%3E%3Cpath%20d%3D%22M9.3%205.7H13v3.7%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.65%22%20stroke-linecap%3D%22square%22%2F%3E%3C%2Fsvg%3E");
+  color: var(--text-normal);
+}
+
+input[data-task="d"]:checked,
+li[data-task="d"] > input:checked,
+li[data-task="d"] > p > input:checked {
+  --oc-task-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M3%204.5%206.5%208l2.2-2.2L13%2010.1%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.65%22%20stroke-linecap%3D%22square%22%20stroke-linejoin%3D%22miter%22%2F%3E%3Cpath%20d%3D%22M9.3%2010.3H13V6.6%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.65%22%20stroke-linecap%3D%22square%22%2F%3E%3C%2Fsvg%3E");
+}
+
+input[data-task="w"]:checked,
+li[data-task="w"] > input:checked,
+li[data-task="w"] > p > input:checked {
+  --oc-task-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20fill%3D%22black%22%20fill-rule%3D%22evenodd%22%20d%3D%22M2.3%2013.2h11.4l.55-8.2-3.75%203.15L8%202.6%205.5%208.15%201.75%205l.55%208.2Zm2.15-2h7.1l.22-2.9-1.95%201.65L8%205.9%206.18%209.95%204.23%208.3l.22%202.9Z%22%20clip-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E");
+  color: var(--text-normal);
+}
+
+input[data-task="p"]:checked,
+li[data-task="p"] > input:checked,
+li[data-task="p"] > p > input:checked {
+  --oc-task-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Crect%20x%3D%223%22%20y%3D%223%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.4%22%2F%3E%3Cpath%20d%3D%22M8%205v6M5%208h6%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22square%22%2F%3E%3C%2Fsvg%3E");
+  color: var(--text-normal);
+}
+
+input[data-task="c"]:checked,
+li[data-task="c"] > input:checked,
+li[data-task="c"] > p > input:checked {
+  --oc-task-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Crect%20x%3D%223%22%20y%3D%223%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.4%22%2F%3E%3Cpath%20d%3D%22M5%208h6%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22square%22%2F%3E%3C%2Fsvg%3E");
+}
+
 .markdown-rendered ul > li, .markdown-rendered ol > li { margin-bottom: 4px; }
 
 .markdown-rendered ul, .markdown-rendered ol {
@@ -1541,7 +1732,8 @@ a:hover { color: var(--text-accent-hover); text-decoration: underline; }
 }
 
 /* Buttons */
-button, .mod-cta {
+button.mod-cta,
+:where(.modal, .prompt, .setting-item-control, .vertical-tab-content, .modal-content) button {
   border-radius: var(--oc-radius-control) !important;
   font-family: var(--font-default);
   transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
@@ -1565,7 +1757,7 @@ button.mod-cta:hover {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12) !important;
 }
 
-button:not(.mod-cta):not(.clickable-icon) {
+:where(.modal, .prompt, .setting-item-control, .vertical-tab-content, .modal-content) button:not(.mod-cta):not(.clickable-icon) {
   background-color: var(--background-tertiary);
   color: var(--text-normal);
   border: 1px solid var(--border-hairline);
@@ -1574,21 +1766,21 @@ button:not(.mod-cta):not(.clickable-icon) {
   font-size: 13px;
 }
 
-button:not(.mod-cta):not(.clickable-icon):hover {
+:where(.modal, .prompt, .setting-item-control, .vertical-tab-content, .modal-content) button:not(.mod-cta):not(.clickable-icon):hover {
   background-color: var(--background-primary);
   border-color: var(--border-hairline);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
 }
 
 /* Small buttons (inline, compact) */
-button:not(.mod-cta):not(.clickable-icon).mod-small,
+:where(.modal, .prompt, .setting-item-control, .vertical-tab-content, .modal-content) button:not(.mod-cta):not(.clickable-icon).mod-small,
 button.mod-cta.mod-small {
   padding: 4px 10px;
   font-size: 12px;
 }
 
 /* Large buttons */
-button:not(.mod-cta):not(.clickable-icon).mod-large,
+:where(.modal, .prompt, .setting-item-control, .vertical-tab-content, .modal-content) button:not(.mod-cta):not(.clickable-icon).mod-large,
 button.mod-cta.mod-large {
   padding: 8px 20px;
   font-size: 14px;
@@ -1829,11 +2021,9 @@ a.tag:hover, .tag:hover {
 
 /* Tree items used in outline, backlinks, tag pane */
 .tree-item-self {
-  padding: 5px 10px 5px 14px;
   border-radius: 0;
   margin: 1px 0;
   color: var(--text-normal);
-  border-left: 2px solid transparent;
   letter-spacing: var(--sidebar-text-tracking);
   transition: background-color 0.12s ease, color 0.12s ease;
   line-height: 1.5;
@@ -1845,7 +2035,7 @@ a.tag:hover, .tag:hover {
 
 .tree-item-self.is-active {
   background-color: var(--bg-active);
-  border-left: 2px solid var(--text-normal);
+  box-shadow: inset 2px 0 0 var(--text-normal);
   color: var(--text-normal);
   font-weight: 600;
 }
@@ -1866,9 +2056,9 @@ a.tag:hover, .tag:hover {
 }
 
 .tree-item-children {
-  padding-left: 14px;
-  border-left: 1px solid var(--border-hairline);
-  margin-left: 14px;
+  padding-inline-start: var(--nav-item-children-padding-start, var(--nav-item-children-padding-left));
+  margin-inline-start: var(--nav-item-children-margin-start, var(--nav-item-children-margin-left));
+  border-inline-start: var(--nav-indentation-guide-width) solid var(--nav-indentation-guide-color);
 }
 
 /* Search input in right sidebar */
@@ -2301,26 +2491,34 @@ a.tag:hover, .tag:hover {
 }
 
 .markdown-source-view .cm-formatting-code {
-  color: var(--text-accent);
+  color: var(--text-muted);
 }
 
 .markdown-source-view .cm-formatting-link {
-  color: var(--text-accent);
+  color: var(--text-muted);
 }
 
 /* Links in source mode */
-.markdown-source-view .cm-link {
-  color: var(--text-accent);
+.markdown-source-view .cm-link,
+.markdown-source-view .cm-hmd-internal-link,
+.markdown-source-view .cm-hmd-external-link,
+.markdown-source-view .cm-link .cm-underline,
+.markdown-source-view .cm-hmd-internal-link .cm-underline,
+.markdown-source-view .cm-hmd-external-link .cm-underline {
+  color: var(--link-color);
+  text-decoration-color: var(--link-decoration-color);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
 }
 
 .markdown-source-view .cm-url {
-  color: var(--text-accent);
+  color: var(--text-muted);
 }
 
 /* Inline code in source mode */
 .markdown-source-view .cm-inline-code {
   font-family: var(--font-monospace);
-  color: var(--text-accent);
+  color: var(--text-normal);
   background-color: var(--bg-secondary);
   border: none;
   padding: 1px 5px;
@@ -2353,7 +2551,7 @@ a.tag:hover, .tag:hover {
 
 /* Callouts in source/live preview */
 .markdown-source-view .callout {
-  border-left: 3px solid var(--callout-info-text);
+  border-left: 2px solid var(--callout-info-text);
 }
 
 .markdown-source-view .callout[data-callout="abstract"],
@@ -2367,7 +2565,7 @@ a.tag:hover, .tag:hover {
 }
 
 .markdown-source-view .callout[data-callout="tip"] {
-  border-left-color: #af52de;
+  border-left-color: var(--callout-tip-text);
 }
 
 .markdown-source-view .callout[data-callout="success"],
@@ -2487,7 +2685,7 @@ a.tag:hover, .tag:hover {
   .nav-file-title,
   .nav-folder-title,
   .tree-item-self {
-    padding: 6px 10px 6px 12px;
+    padding-block: 6px;
   }
 
   .markdown-rendered pre code {
