@@ -6,6 +6,18 @@
 
 [English](https://github.com/elijahchan2019/obsidian-opendian-theme/blob/main/README.md) · 亮色 &amp; 暗色 · 桌面 &amp; 移动端 · 无需插件
 
+## 推荐字体
+
+Opendian 围绕 **IBM Plex Mono** 设计，这是 OpenCode 文档也在使用的开源等宽字体。主题本身已经写好了回退字体栈；不安装也可以使用，但安装 IBM Plex Mono 后，侧边栏、标题和正文的字距会更接近设计稿。
+
+macOS 用户如果已安装 Homebrew，可以运行：
+
+```bash
+brew install --cask font-ibm-plex-mono
+```
+
+也可以从 [IBM Plex 官方仓库](https://github.com/IBM/plex)下载。安装后建议重启 Obsidian。
+
 ## 为什么选择 Opendian
 
 - **等宽字体优先** —— IBM Plex Mono → Berkeley Mono → JetBrains Mono 横跨标题、正文与界面。你的知识库读起来像终端输出和技术文档。

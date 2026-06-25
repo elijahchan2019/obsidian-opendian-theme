@@ -94,7 +94,13 @@
   /* UI chrome */
   --sidebar-pill-bg: rgba(255, 255, 255, 0.08);
   --sidebar-pill-border: rgba(255, 255, 255, 0.12);
+  --sidebar-text-tracking: -0.02em;
   --code-dot-color: var(--oc-text-disabled);
+  --status-chip-background: rgba(28, 28, 31, 0.92);
+  --status-chip-border: rgba(255, 255, 255, 0.10);
+  --status-chip-separator: rgba(255, 255, 255, 0.22);
+  --status-chip-shadow: none;
+  --status-chip-sync: var(--text-muted);
   /* Checkbox: monochrome fill (black in light / white in dark, via
      --text-normal), small radius, tick uses --background-primary for
      contrast. --checklist-done-decoration:none drops the strikethrough on
@@ -249,7 +255,13 @@
   /* UI chrome */
   --sidebar-pill-bg: #ffffff;
   --sidebar-pill-border: var(--oc-border);
+  --sidebar-text-tracking: -0.02em;
   --code-dot-color: var(--oc-text-disabled);
+  --status-chip-background: rgba(255, 255, 255, 0.92);
+  --status-chip-border: rgba(0, 0, 0, 0.105);
+  --status-chip-separator: rgba(0, 0, 0, 0.20);
+  --status-chip-shadow: 0 6px 18px rgba(0, 0, 0, 0.035);
+  --status-chip-sync: var(--text-muted);
   /* Checkbox: monochrome fill (black in light / white in dark, via
      --text-normal), small radius, tick uses --background-primary for
      contrast. --checklist-done-decoration:none drops the strikethrough on
@@ -461,10 +473,11 @@ body:not(.is-mobile) .workspace-split.mod-left-split
 body:not(.is-mobile) .workspace-split.mod-left-split
   .workspace-sidedock-vault-profile .workspace-drawer-vault-switcher {
   border-radius: var(--oc-radius-control);
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   min-width: 0;
-  padding-inline: 0;
+  padding-inline: 8px 10px;
 }
 
 body:not(.is-mobile) .workspace-split.mod-left-split
@@ -477,7 +490,10 @@ body:not(.is-mobile) .workspace-split.mod-left-split
   font-weight: 600;
   color: var(--text-normal);
   line-height: 24px;
+  overflow: hidden;
   padding-bottom: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 body:not(.is-mobile) .workspace-sidedock-vault-profile .workspace-drawer-vault-actions,
@@ -541,6 +557,7 @@ body:not(.is-mobile) .workspace-sidedock-vault-profile .clickable-icon:has(svg.l
   padding: 5px 10px 5px 14px;
   margin: 1px 0;
   color: var(--text-normal);
+  letter-spacing: var(--sidebar-text-tracking);
   transition: background-color 0.12s ease, color 0.12s ease;
   border-left: 2px solid transparent;
 }
@@ -1817,6 +1834,7 @@ a.tag:hover, .tag:hover {
   margin: 1px 0;
   color: var(--text-normal);
   border-left: 2px solid transparent;
+  letter-spacing: var(--sidebar-text-tracking);
   transition: background-color 0.12s ease, color 0.12s ease;
   line-height: 1.5;
 }
@@ -2025,17 +2043,51 @@ a.tag:hover, .tag:hover {
    15. STATUS BAR & TITLE BAR
    ============================================================ */
 .status-bar {
-  background-color: var(--background-secondary);
-  border-top: 1px solid var(--border-hairline);
+  --status-bar-background: var(--status-chip-background);
+  --status-bar-border-color: var(--status-chip-border);
+  --status-bar-border-width: 1px;
+  --status-bar-radius: var(--oc-radius-control);
+  align-items: center;
+  background-color: var(--status-chip-background);
+  border-color: var(--status-chip-border);
+  border-radius: var(--oc-radius-control) !important;
+  border-style: solid;
+  border-width: 1px;
+  box-shadow: var(--status-chip-shadow) !important;
   color: var(--text-muted);
   font-size: 12px;
-  padding: 0 10px;
+  gap: 0;
+  min-height: 24px;
+  margin: 0 8px 8px 0;
+  overflow: hidden;
+  padding: 2px 6px;
 }
 
 .status-bar-item {
-  padding: 0 8px;
+  align-items: center;
+  background-color: transparent;
   border-radius: var(--oc-radius);
+  color: var(--text-muted);
+  min-height: 18px;
+  padding: 0 7px;
+  position: relative;
   transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.status-bar-item.plugin-editor-status,
+.status-bar-item.plugin-sync {
+  padding: 0 7px;
+}
+
+.status-bar-item:not(:first-child)::before {
+  background-color: var(--status-chip-separator);
+  border-radius: 999px;
+  content: "";
+  height: 3px;
+  left: -1px;
+  position: absolute;
+  top: calc(50% - 1.5px);
+  width: 3px;
 }
 
 .status-bar-item:hover {
@@ -2043,8 +2095,26 @@ a.tag:hover, .tag:hover {
   color: var(--text-normal);
 }
 
+.status-bar-item:hover::before,
+.status-bar-item:hover + .status-bar-item::before {
+  opacity: 0;
+}
+
 .status-bar-item.mod-clickable {
   cursor: pointer;
+}
+
+.status-bar .svg-icon,
+.status-bar .sync-status-icon,
+.status-bar .sync-status-icon.mod-success,
+.status-bar .sync-status-icon.mod-working,
+.status-bar .sync-status-icon.mod-error {
+  color: var(--status-chip-sync) !important;
+}
+
+.status-bar-item:hover .svg-icon,
+.status-bar-item:hover .sync-status-icon {
+  color: var(--text-normal) !important;
 }
 
 .titlebar {

@@ -6,6 +6,18 @@
 
 [中文介绍](https://github.com/elijahchan2019/obsidian-opendian-theme/blob/main/README.zh-CN.md) · Light &amp; Dark · Desktop &amp; Mobile · No plugin required
 
+## Recommended Font
+
+Opendian is designed around **IBM Plex Mono**, the same open-source mono family used by OpenCode's documentation. The theme includes a fallback stack, but installing IBM Plex Mono gives the sidebar, headings, and editor text the intended spacing.
+
+macOS users with Homebrew can install it with:
+
+```bash
+brew install --cask font-ibm-plex-mono
+```
+
+You can also download it from the official [IBM Plex repository](https://github.com/IBM/plex). Restart Obsidian after installing the font.
+
 ## Why Opendian
 
 - **Monospace-first typography** — IBM Plex Mono → Berkeley Mono → JetBrains Mono across headings, body, and UI. Your vault reads like terminal output and technical documentation.
