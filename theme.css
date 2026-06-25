@@ -65,6 +65,10 @@
   --link-external-color: var(--link-color);
   --link-external-color-hover: var(--link-color-hover);
   --link-unresolved-color: var(--text-muted);
+  --tag-background: var(--text-normal);
+  --tag-background-hover: var(--text-muted);
+  --tag-color: var(--background-primary);
+  --tag-color-hover: var(--background-primary);
   --text-error: var(--oc-danger);
   --text-success: var(--oc-success);
   --text-selection: rgba(0, 122, 255, 0.25);
@@ -242,6 +246,10 @@
   --link-external-color: var(--link-color);
   --link-external-color-hover: var(--link-color-hover);
   --link-unresolved-color: var(--text-muted);
+  --tag-background: var(--text-normal);
+  --tag-background-hover: var(--text-muted);
+  --tag-color: var(--background-primary);
+  --tag-color-hover: var(--background-primary);
   --text-error: var(--oc-danger);
   --text-success: var(--oc-success);
   --text-selection: rgba(0, 122, 255, 0.20);
@@ -1010,6 +1018,11 @@ a {
 a:hover {
   color: var(--link-color-hover);
   text-decoration-color: var(--link-decoration-color-hover);
+}
+
+.external-link {
+  background-image: none !important;
+  padding-inline-end: 0 !important;
 }
 
 .markdown-rendered hr {
@@ -1891,25 +1904,47 @@ input[type="text"]:focus, input[type="search"]:focus, textarea:focus {
 /* ============================================================
    10. TAGS
    ============================================================ */
-a.tag, .tag {
-  background-color: var(--background-secondary);
-  border: 1px solid var(--border-color);
+.tag,
+.cm-hashtag {
+  background-color: var(--tag-background) !important;
+  border: 1px solid var(--text-normal);
   border-radius: var(--oc-radius);
   padding: 3px 10px;
   font-size: 0.8em;
-  color: var(--text-muted);
+  color: var(--tag-color) !important;
   font-weight: 500;
   text-decoration: none !important;
   font-family: var(--font-default);
   transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
-  display: inline-block;
   line-height: 1.4;
 }
 
-a.tag:hover, .tag:hover {
-  background-color: var(--bg-hover);
-  color: var(--text-normal);
-  border-color: var(--border-hover);
+.markdown-rendered a.tag,
+.markdown-rendered td a.tag,
+.markdown-rendered th a.tag,
+.markdown-rendered li a.tag,
+.markdown-rendered blockquote a.tag,
+a.tag {
+  color: var(--tag-color) !important;
+}
+
+.tag:hover,
+.cm-hashtag:hover {
+  background-color: var(--tag-background-hover) !important;
+  color: var(--tag-color-hover) !important;
+  border-color: var(--text-muted);
+}
+
+.cm-hashtag.cm-hashtag-begin {
+  border-radius: var(--oc-radius) 0 0 var(--oc-radius);
+  padding-left: 10px;
+  padding-right: 1px;
+}
+
+.cm-hashtag.cm-hashtag-end {
+  border-radius: 0 var(--oc-radius) var(--oc-radius) 0;
+  padding-left: 1px;
+  padding-right: 10px;
 }
 
 /* ============================================================
@@ -2538,6 +2573,12 @@ a.tag:hover, .tag:hover {
 
 .markdown-source-view .cm-url {
   color: var(--text-muted);
+}
+
+.markdown-source-view .cm-hmd-external-link,
+.markdown-source-view .cm-hmd-external-link .cm-underline {
+  background-image: none !important;
+  padding-inline-end: 0 !important;
 }
 
 /* Inline code in source mode */
