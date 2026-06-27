@@ -1162,7 +1162,10 @@ a:hover {
   font-family: var(--font-default);
   flex: 0 0 auto;
   min-width: auto;
-  line-height: 1.5;
+  /* Match .callout-content's line-height so the title's first-line top-leading
+     equals the content's — otherwise the two columns (flex-start) start their
+     text at different y and the right side reads ~2px low. */
+  line-height: 1.6;
 }
 
 .callout-title-inner {
@@ -1189,7 +1192,6 @@ a:hover {
   line-height: 1.6;
   flex: 1 1 auto;
   margin: 0;
-  padding-top: 1px;
 }
 
 .callout-content p {
@@ -1955,6 +1957,18 @@ a.tag {
   padding: 8px 0;
 }
 
+/* Collapse the empty .view-header inside sidebar panes. Outline / backlinks
+   render a (titleless) view-header between .nav-header and .view-content that
+   the file explorer does not, adding a few px above the content so the outline
+   rail starts lower than the file-explorer rail. Hiding it in BOTH side splits
+   makes every sidebar pane start its content at the same y, independent of
+   which views ship a header. Scoped to side splits only — the editor
+   (.mod-root) keeps its header (inline title / tab actions live there). */
+.workspace-split.mod-left-split .view-header,
+.workspace-split.mod-right-split .view-header {
+  display: none !important;
+}
+
 /* --- Auto-collapsing sidebar toolbars (both side splits) ---------------
    The top function bar (new note / sort / outline switches …) is hidden by
    default and slides open on hover, leaving a small drag-handle hint — same
@@ -2488,6 +2502,17 @@ a.tag {
   color: #22863a;
 }
 
+/* Function / attribute names: the dark-mode #b392f0 (light lavender) washes
+   out on the white light-mode surface. Drop them to the same deep purple the
+   keyword override uses, matching GitHub's light palette. (Without this they
+   were the only two token types left at their dark-mode color in light mode.) */
+.theme-light .cm-attribute,
+.theme-light .markdown-rendered pre code .token.attr-name,
+.theme-light .cm-function,
+.theme-light .markdown-rendered pre code .token.function {
+  color: #6f42c1;
+}
+
 /* ============================================================
     17. EDITOR / SOURCE MODE PARITY
     ============================================================ */
@@ -2810,4 +2835,22 @@ a.tag {
   color: var(--text-normal);
   background-color: var(--bg-active);
   border-bottom: 2px solid var(--text-normal);
+}
+
+/* ============================================================
+   19. REDUCED MOTION
+   ============================================================ */
+/* Honor the OS "reduce motion" setting: collapse every transition/animation
+   to a near-instant duration so vestibular-sensitive users don't get the
+   sidebar-toolbar slide, pill fade, or hover tweens. Not 0s — a 0.01ms floor
+   keeps transitionend events firing so any JS relying on them still resolves. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
 }
