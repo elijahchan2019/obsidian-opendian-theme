@@ -2002,6 +2002,11 @@ a.tag {
 .workspace-split.mod-right-split .nav-buttons-container {
   display: flex !important;
   justify-content: center;
+  /* Allow a second row so plugins that inject many buttons (e.g. Git source
+     control: 8 icons + a commit input) are not clipped. flex-wrap is a no-op
+     when the buttons fit one line, so the file-explorer / outline rails are
+     unchanged — they still render a single centered row. */
+  flex-wrap: wrap;
   gap: 4px;
   overflow: hidden;
   max-height: 0;
@@ -2016,7 +2021,9 @@ a.tag {
 }
 .workspace-split.mod-left-split .nav-header:hover .nav-buttons-container,
 .workspace-split.mod-right-split .nav-header:hover .nav-buttons-container {
-  max-height: 40px;
+  /* Cap is a ceiling, not a fixed height: one-row rails stay ~32px tall and
+     reveal identically; only the wrapped Git toolbar uses the extra height. */
+  max-height: 88px;
   opacity: 1;
   margin: 6px 0 !important;
   pointer-events: auto;
@@ -2069,6 +2076,21 @@ a.tag {
 .workspace-split.mod-right-split .view-content > :first-child {
   padding-top: 0 !important;
   margin-top: 0 !important;
+}
+
+/* Obsidian Git drag-handle alignment.
+   Unlike a normal sidebar leaf — where .nav-header is a top-level child sitting
+   ABOVE .view-content — the Git plugin nests .nav-header inside
+   .view-content > main.git-view. The nested header therefore inherits the 10px
+   top padding above, dropping its drag-handle pill ~that-much lower than the
+   file-explorer / outline rails. The breathing room is meant for tree content,
+   not the pill rail, so for git-view we zero it: the nested header rises back to
+   the pane top and the pill realigns at its own 7px margin. Scoped by
+   [data-type="git-view"] (0,5,0 + !important) so only this view is affected;
+   the bottom padding from §11 line 1955 is untouched. */
+.workspace-split.mod-right-split
+  .workspace-leaf-content[data-type="git-view"] .view-content {
+  padding-top: 0 !important;
 }
 
 /* Tree items used in outline, backlinks, tag pane */
