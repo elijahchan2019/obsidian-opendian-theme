@@ -610,7 +610,6 @@ body:not(.is-mobile) .workspace-sidedock-vault-profile .clickable-icon:has(svg.l
 }
 
 .nav-folder-title {
-  font-size: 0.95em;
   color: var(--text-muted);
   font-weight: 500;
 }
@@ -1131,6 +1130,21 @@ a:hover {
 .markdown-rendered table[data-compact] td,
 .markdown-rendered table[data-compact] th {
   padding: 6px 12px 6px 0;
+}
+
+/* Dataview tables. The plugin's own stylesheet gives every <tr>
+   `margin: 1em 0` (search "margin-top: 1em" in dataview/styles.css)
+   and bumps <th> to `font-size: larger`. Reset margins to zero and
+   let everything else (font-size, line-height, padding, border) inherit
+   from the .markdown-rendered table rules in §5 so dataview tables
+   match the standard Opendian table rhythm exactly. */
+.table-view-table > thead > tr,
+.table-view-table > tbody > tr {
+  margin: 0;
+}
+.table-view-table > thead > tr > th,
+.table-view-table > tbody > tr > td {
+  font-size: 1em;
 }
 
 /* ============================================================
@@ -1919,6 +1933,10 @@ input[type="text"]:focus, input[type="search"]:focus, textarea:focus {
   font-family: var(--font-default);
   transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
   line-height: 1.4;
+  /* Tags are atomic — never break mid-tag (e.g. "#测" / "试" in a narrow
+     dataview column). Allow the cell to overflow horizontally instead. */
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .markdown-rendered a.tag,
