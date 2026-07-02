@@ -92,6 +92,33 @@ DEV_VAULT 已通过 symlink 把本主题挂进 `../DEV_VAULT/.obsidian/themes/Op
 > **诊断顺序**：先 `grep -i opendian` 那份清单看在不在索引里；再查 latest release 的 tag
 > 是否 == manifest version（无 v）+ 资产是否齐。两头都要看。
 
+## 🚨 红线：发版必须合规，否则会被踢出主题市场索引
+
+**这是运营铁律，比任何代码改动都重要，牢记：**
+
+- Opendian **已在**官方索引里（`community-css-themes.json`）。只要每次发版都合规，
+  发布后主题市场的版本号会**近乎实时**跟进——非常快。
+- **一旦发出一个不合规的 release，主题会被官方直接剔除出索引**，app 内立刻搜不到。
+  之后只能干等官方索引机器人**周期性扫描**（慢时要好几个小时）才重新收录。
+- 所以：**宁可慢，不可错。** 发版前后必须逐条核对合规，绝不为图快跳过自检。
+
+**"合规"= 每次发版都满足：**
+1. release 的 tag **精确等于** manifest 的 `version`，**绝不带 `v` 前缀**。
+2. release 挂全资产（至少 `theme.css` + `manifest.json`）。
+3. release 被标为 **Latest**（`--latest`；乱序/超时可能标错，必须核）。
+4. main 的 manifest `name` 是 `"Opendian"`（不是 `"Opendian-dev"`）、必填字段齐。
+5. `theme.css` 不引用外部网络资源 / 远程字体（审核硬性要求）。
+
+**发完 30 秒强制自检（缺一不可）：**
+```bash
+gh api repos/elijahchan2019/obsidian-opendian-theme/releases/latest --jq '.tag_name'  # == manifest version，无 v
+gh release view <版本> --json assets --jq '.assets[].name'                            # theme.css / manifest.json 在
+gh api repos/elijahchan2019/obsidian-opendian-theme/releases --jq '.[]|select(.tag_name=="<版本>")|.draft'  # 必须 false
+```
+> ⚠️ 坑：`gh release create` 传大图可能**客户端超时**，把 release 卡在 **draft** 态
+> ——draft 不建 tag、不算 Latest、市场也看不到。若自检发现 `draft=true`，
+> 用 `gh release edit <版本> --draft=false --latest` 转正。
+
 ## 发布前（dev → main 合并时）
 
 > 跨项目血泪：姊妹项目 Folio 就因为有人把发版 tag 加了 `v` 前缀（`v1.2.1`），导致
