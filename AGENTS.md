@@ -70,6 +70,42 @@ DEV_VAULT 已通过 symlink 把本主题挂进 `../DEV_VAULT/.obsidian/themes/Op
 
 ## 提交前
 
-- `manifest.json` 的 `version` 是否需要 bump（`versions.json` 维护 minAppVersion 映射）。
+- `manifest.json` 的 `version` 是否需要 bump。
 - light + dark 都验过。
 - 没有顺手改到无关区段。
+
+> ⚠️ **别被 `versions.json` 误导。** 仓库里有 `versions.json`，但**那是插件（plugin）概念，主题（theme）根本不读它**。它不影响安装、也不影响市场可见性——留着无害，但**不要**当发版必做项，更别以为动它能修市场问题。
+
+> ⚠️ **市场「搜不到」≠ release / 版本问题。** 主题能否在 Obsidian 市场被搜到，只取决于它在不在官方仓库 `obsidianmd/obsidian-releases` 的 `community-css-themes.json` 里（Opendian 目前在，Folio 目前不在）。改本地 tag / version / versions.json **都不影响它**。排查市场问题先 grep 那个清单，别在自己仓库瞎改。
+
+## 发布前（dev → main 合并时）
+
+> 跨项目血泪：姊妹项目 Folio 就因为有人把发版 tag 加了 `v` 前缀（`v1.2.1`），导致
+> Obsidian 手动检测报「no GitHub release with that version」。Opendian 目前 tag 全是
+> 无前缀（`1.12.2`…），是对的——**别在这重蹈覆辙。**
+
+1. **dev 上完成所有 commit + `version` bump**，`git push origin dev`。**不要**在 main 手改 `theme.css`。
+2. **切到 `../Opendian`（main）**，`git fetch origin`，合并 dev（ff-only 或 --no-ff 视是否 diverged）。
+3. **改 manifest 的 name**：merge 会带来 dev 的 `name: "Opendian-dev"`，**必须改回 `"Opendian"`**（否则发成了 dev 主题）。amend 进版本 commit 保持干净。
+4. **push main，一条命令建 release**（tag + 资产 + Latest + 说明一把到位）：
+
+   **三条铁律，每条 Folio 都踩过：**
+   - **① tag 名 = manifest `version`，绝不带 `v` 前缀。** Obsidian 按 manifest `version`
+     字符串找同名 release，带 `v` 会检测报错。
+   - **② 挂全资产**：至少 `theme.css` + `manifest.json`（惯例连 README/截图一起挂）。
+   - **③ 显式 `--latest`**：GitHub 默认按发布时间判定，乱序/补发会把旧版错标为 Latest。
+
+   ```bash
+   git push origin main
+   gh release create X.Y.Z --target main --latest --title "X.Y.Z" \
+     --notes "……（累积改动）" \
+     theme.css manifest.json README.md README.zh-CN.md screenshot.png feature-artboard.png
+   ```
+5. **发完自检**（30 秒）：
+   ```bash
+   gh api repos/elijahchan2019/obsidian-opendian-theme/releases/latest --jq '.tag_name'  # 应 == manifest version，无 v
+   gh release view X.Y.Z --json assets --jq '.assets[].name'                             # theme.css / manifest.json 在
+   ```
+   两条都对，再回 Obsidian 点一次「检查更新」确认不报错。
+
+**为什么 dev 的 name 是 "Opendian-dev"**：两个主题同名会在 Obsidian 里冲突。保持 dev 叫 "Opendian-dev"、main 叫 "Opendian" 才能在同一 vault 同时存在并对照调试。反向从 main cherry-pick 回 dev 时也要把 name 改回 "Opendian-dev"。
