@@ -128,6 +128,7 @@ gh api repos/elijahchan2019/obsidian-opendian-theme/releases --jq '.[]|select(.t
 1. **dev 上完成所有 commit + `version` bump**，`git push origin dev`。**不要**在 main 手改 `theme.css`。
 2. **切到 `../Opendian`（main）**，`git fetch origin`，合并 dev（ff-only 或 --no-ff 视是否 diverged）。
 3. **改 manifest 的 name**：merge 会带来 dev 的 `name: "Opendian-dev"`，**必须改回 `"Opendian"`**（否则发成了 dev 主题）。amend 进版本 commit 保持干净。
+3b. **main 不保留 `AGENTS.md`**（内部开发文档只活在 dev；main 是发布产物）。若合并带入或冲突，`git rm AGENTS.md` 保留删除；合并后 `git ls-files AGENTS.md` 应为空。
 4. **push main，一条命令建 release**（tag + 资产 + Latest + 说明一把到位）：
 
    **三条铁律，每条 Folio 都踩过：**
